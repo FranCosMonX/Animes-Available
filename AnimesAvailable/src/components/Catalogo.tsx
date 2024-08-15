@@ -1,4 +1,4 @@
-import { Grid } from "@mui/material"
+import { Card } from "@mui/material"
 import { ReactNode } from "react"
 
 interface CatalogoParams {
@@ -12,9 +12,21 @@ interface CatalogoParams {
  */
 const Catalogo = ({ children }: CatalogoParams) => {
   return (
-    <Grid container gap={1}>
+    <Card
+      elevation={0}
+      sx={{
+        background: 'none',
+        border: '0',
+        display: 'flex',
+        justifyContent: 'space-between',
+        gap: '15px',
+        flexWrap: 'wrap',
+        width: '95%',
+        marginTop: '15px'
+      }}
+    >
       {children}
-    </Grid>
+    </Card>
   )
 }
 

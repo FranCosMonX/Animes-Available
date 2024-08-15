@@ -1,6 +1,14 @@
-import { Button, Grid, Typography } from "@mui/material"
-import { ReactNode } from "react"
-import { useNavigate } from "react-router-dom"
+import { Button, Grid, Typography } from "@mui/material";
+import { ReactNode } from "react";
+import { useNavigate } from "react-router-dom";
+
+const BaseStyle: React.CSSProperties | undefined = {
+  display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'
+}
+
+interface propBase {
+  children: ReactNode;
+}
 
 export const Header = () => {
   const navigate = useNavigate()
@@ -40,15 +48,11 @@ export const Footer = () => {
   )
 }
 
-interface propBase {
-  children: ReactNode;
-}
-
 export const Base = ({ children }: propBase) => {
   return (
-    <>
+    <div style={BaseStyle}>
       <Header />
       {children}
-    </>
+    </ div>
   )
 }
