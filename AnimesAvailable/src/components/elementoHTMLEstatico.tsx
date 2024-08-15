@@ -23,8 +23,9 @@ export const Footer = () => {
   return (
     <Grid container item
       display={"flex"}
+      flexDirection={"column"}
       gap={1}
-      sx={{ padding: "5px 20px" }}
+      sx={{ padding: "10px 20px" }}
       className="footer"
     >
       <p>Este site o resultado para uma atividade proposta pela talentos Cloud.</p>
