@@ -1,8 +1,8 @@
-import { Button, Card, Container, Grid, TextField, Typography } from "@mui/material"
+import { Button, Card, Grid, TextField, Typography } from "@mui/material"
 import { FormEvent } from "react"
 import { useNavigate } from "react-router-dom"
 import imagemAnimes from '../../../assets/images/Selecta-Visión-Amazon-Prime-Video.jpg'
-import { Header } from "../elementoHTMLEstatico"
+import { Base } from "../elementoHTMLEstatico"
 import './login.css'
 
 const Login = () => {
@@ -14,8 +14,7 @@ const Login = () => {
   }
 
   return (
-    <Container disableGutters>
-      <Header />
+    <Base>
       <form onSubmit={handleSubmit}>
         <img
           src={imagemAnimes}
@@ -56,7 +55,7 @@ const Login = () => {
           </Grid>
         </Card>
       </form>
-    </Container>
+    </Base>
   )
 }
 

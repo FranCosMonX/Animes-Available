@@ -1,12 +1,11 @@
 import { Grid, Typography } from '@mui/material'
 import imagemAnimes from '../../../assets/images/Selecta-Visión-Amazon-Prime-Video.jpg'
-import { Footer, Header } from '../elementoHTMLEstatico'
+import { Base, Footer } from '../elementoHTMLEstatico'
 import './inicio.css'
 
 const Inicio = () => {
   return (
-    <>
-      <Header />
+    <Base>
       <Grid container item
         position={'relative'}
         className='main'
@@ -27,7 +26,7 @@ const Inicio = () => {
         >Avalie seus filmes favoritos</Typography>
       </Grid>
       <Footer />
-    </>
+    </Base>
   )
 }
 
