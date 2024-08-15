@@ -1,5 +1,3 @@
-import { Grid } from "@mui/material";
-import Anime from "../../../Anime";
 import Catalogo from "../../../Catalogo";
 import { Base } from "../../elementoHTMLEstatico";
 import './todosOsAnimes.css';
@@ -56,14 +54,7 @@ const listaAnimes: Array<AnimeInterface> = [{
 const CatalogoGeral = () => {
   return (
     <Base>
-      <Catalogo>
-        {listaAnimes.map((anime) => {
-          return (
-            <Grid key={anime.id} container item xs={4} sm={3} md={2} lg={2} xl={2}>
-              <Anime anime={anime} />
-            </Grid>)
-        })}
-      </Catalogo>
+      <Catalogo listaAnimes={listaAnimes} />
     </Base>
   )
 }

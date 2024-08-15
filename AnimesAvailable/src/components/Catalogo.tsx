@@ -1,8 +1,15 @@
-import { Card } from "@mui/material"
-import { ReactNode } from "react"
+import { Card, Grid } from "@mui/material";
+import Anime from "./Anime";
+
+interface AnimeInterface {
+  id: number;
+  nome: string;
+  uri: string;
+  alt: string;
+}
 
 interface CatalogoParams {
-  children: ReactNode
+  listaAnimes: AnimeInterface[];
 }
 
 /**
@@ -10,7 +17,7 @@ interface CatalogoParams {
  * @param anime : Grid item (MaterialUI) contendo um padrão para detalhar um anime 
  * @returns 
  */
-const Catalogo = ({ children }: CatalogoParams) => {
+const Catalogo = ({ listaAnimes }: CatalogoParams) => {
   return (
     <Card
       elevation={0}
@@ -25,7 +32,13 @@ const Catalogo = ({ children }: CatalogoParams) => {
         marginTop: '15px'
       }}
     >
-      {children}
+      {listaAnimes.map((anime) => {
+        return (
+          <Grid key={anime.id} container item xs={4} sm={3} md={2} lg={2} xl={2}>
+            <Anime anime={anime} />
+          </Grid>
+        )
+      })}
     </Card>
   )
 }
