@@ -30,6 +30,16 @@ body {
   place-items: center;*/
 }
 
+
+form {
+  padding-top: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 500px;
+  gap: 10px;
+}
+
 .footer p {
   margin: 0;
 }
