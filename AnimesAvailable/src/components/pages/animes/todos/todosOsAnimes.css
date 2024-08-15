@@ -1,3 +1,24 @@
-img {
-  height: 270px;
+#cardAnime {
+  position: relative;
+}
+
+#info {
+  width: 100%;
+  display: none;
+  position: absolute;
+  z-index: 10;
+  top: 50%;
+  left: 5px;
+  transform: translateY(-50%);
+}
+
+#cardAnime:hover img {
+  filter: brightness(50%);
+  transition: .5s;
+}
+
+#cardAnime:hover #info {
+  display: block;
+  color: white;
+  transition: .5s;
 }
