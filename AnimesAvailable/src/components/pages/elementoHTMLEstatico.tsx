@@ -1,6 +1,9 @@
 import { Button, Grid, Typography } from "@mui/material"
+import { useNavigate } from "react-router-dom"
 
 export const Header = () => {
+  const navigate = useNavigate()
+
   return (
     <Grid container
       display={"flex"}
@@ -9,13 +12,15 @@ export const Header = () => {
       sx={{ padding: "5px 20px" }}
     >
       <Grid item>
-        <Button><Typography fontWeight={"bold"}>Avaliador de Filmes</Typography></Button>
+        <Button type="button" onClick={() => navigate('/')}>
+          <Typography fontWeight={"bold"}>Avaliador de Filmes</Typography>
+        </Button>
       </Grid>
       <Grid item display={"flex"} gap={2}>
-        <Button color="secondary" variant="contained">CADASTRAR</Button>
-        <Button color="secondary" variant="contained">LOGIN</Button>
+        <Button color="secondary" variant="contained" onClick={() => navigate('/cadastro')}>CADASTRAR</Button>
+        <Button color="secondary" variant="contained" onClick={() => navigate('/login')}> LOGIN</Button>
       </Grid>
-    </Grid>
+    </Grid >
   )
 }
 
