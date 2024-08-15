@@ -1,4 +1,4 @@
-import { Button, Container, Grid, Typography } from "@mui/material"
+import { Button, Grid, Typography } from "@mui/material"
 import { ReactNode } from "react"
 import { useNavigate } from "react-router-dom"
 
@@ -46,9 +46,9 @@ interface propBase {
 
 export const Base = ({ children }: propBase) => {
   return (
-    <Container disableGutters>
+    <>
       <Header />
       {children}
-    </Container>
+    </>
   )
 }
