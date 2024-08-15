@@ -27,3 +27,7 @@ body {
   /*display: flex;
   place-items: center;*/
 }
+
+.footer p {
+  margin: 0;
+}
