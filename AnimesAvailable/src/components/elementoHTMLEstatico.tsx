@@ -9,11 +9,11 @@ export const Header = () => {
       sx={{ padding: "5px 20px" }}
     >
       <Grid item>
-        <Button><Typography>Avaliador de Filmes</Typography></Button>
+        <Button><Typography fontWeight={"bold"}>Avaliador de Filmes</Typography></Button>
       </Grid>
       <Grid item display={"flex"} gap={2}>
-        <Button>CADASTRAR</Button>
-        <Button>LOGIN</Button>
+        <Button color="secondary" variant="contained">CADASTRAR</Button>
+        <Button color="secondary" variant="contained">LOGIN</Button>
       </Grid>
     </Grid>
   )
