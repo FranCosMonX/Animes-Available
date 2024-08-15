@@ -1,4 +1,5 @@
 import { Button, Card, Container, Grid, TextField, Typography } from "@mui/material"
+import { FormEvent } from "react"
 import { useNavigate } from "react-router-dom"
 import imagemAnimes from '../../../assets/images/Selecta-Visión-Amazon-Prime-Video.jpg'
 import { Header } from "../elementoHTMLEstatico"
@@ -7,10 +8,15 @@ import './login.css'
 const Login = () => {
   const navigate = useNavigate()
 
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    navigate('/animes/todos')
+  }
+
   return (
     <Container disableGutters>
       <Header />
-      <form>
+      <form onSubmit={handleSubmit}>
         <img
           src={imagemAnimes}
           alt="Imagem contendo alguns atores em filmes de ação encontradas na plataforma da netflix"

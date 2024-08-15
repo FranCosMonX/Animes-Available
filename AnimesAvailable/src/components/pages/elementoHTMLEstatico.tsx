@@ -1,4 +1,5 @@
-import { Button, Grid, Typography } from "@mui/material"
+import { Button, Container, Grid, Typography } from "@mui/material"
+import { ReactNode } from "react"
 import { useNavigate } from "react-router-dom"
 
 export const Header = () => {
@@ -36,5 +37,18 @@ export const Footer = () => {
       <p>Este site o resultado para uma atividade proposta pela talentos Cloud.</p>
       <p>Desenvolvido por Francisco Xavier.</p>
     </Grid>
+  )
+}
+
+interface propBase {
+  children: ReactNode;
+}
+
+export const Base = ({ children }: propBase) => {
+  return (
+    <Container disableGutters>
+      <Header />
+      {children}
+    </Container>
   )
 }
