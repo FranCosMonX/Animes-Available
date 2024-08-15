@@ -1,0 +1,17 @@
+@startuml
+
+actor usuario
+actor "Banco de Dados" as BD
+actor API
+
+usecase "Cadastro de usuário" as cadastro
+usecase "Login de usuário" as login
+
+usuario -- cadastro
+usuario -- login
+cadastro .-> login
+API -left- BD : salva e resgata dados
+API -- cadastro
+API -- login
+
+@enduml
