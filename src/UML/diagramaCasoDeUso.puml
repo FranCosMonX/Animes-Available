@@ -1,5 +1,7 @@
 @startuml
 
+note "Códigos de teste para fazer o papel da Api e BD" as notaGlobal
+
 actor usuario
 actor "Banco de Dados" as BD
 actor API
@@ -13,5 +15,8 @@ cadastro .-> login
 API -left- BD : salva e resgata dados
 API -- cadastro
 API -- login
+
+notaGlobal .up- BD
+notaGlobal .up- API
 
 @enduml
