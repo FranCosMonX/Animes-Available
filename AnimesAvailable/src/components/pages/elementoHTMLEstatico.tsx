@@ -21,7 +21,22 @@ export const Header = () => {
       sx={{ padding: "5px 20px" }}
     >
       <Grid item>
-        <Button type="button" onClick={() => navigate('/')}>
+        <Button type="button" onClick={() => {
+          const resultado = sessionStorage.getItem('usuario')
+          if (resultado) {
+            const usuario: {
+              logado: Boolean,
+              nome: string
+            } = JSON.parse(resultado)
+
+            console.log(usuario.logado)
+            if (usuario.logado)
+              navigate('/animes/todos')
+          } else {
+            navigate('/')
+          }
+
+        }}>
           <Typography fontWeight={"bold"}>Avaliador de Filmes</Typography>
         </Button>
       </Grid>

@@ -10,6 +10,11 @@ const Login = () => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    const usuario = {
+      logado: true,
+      nome: "teste"
+    }
+    sessionStorage.setItem("usuario", JSON.stringify(usuario))
     navigate('/animes/todos')
   }
 
