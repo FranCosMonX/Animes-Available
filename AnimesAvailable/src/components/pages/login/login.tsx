@@ -68,7 +68,6 @@ const Login = () => {
         }}>
           <Typography variant="h4" textAlign={"center"}>Login</Typography>
           <TextField
-            id="usuario"
             variant="outlined"
             label="Usuário"
             type="text"
@@ -78,7 +77,6 @@ const Login = () => {
             helperText={errors.usuario?.message}
           />
           <TextField
-            id="senha"
             variant="outlined"
             label="Senha"
             type="password"

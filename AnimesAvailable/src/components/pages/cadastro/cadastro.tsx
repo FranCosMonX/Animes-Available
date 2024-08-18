@@ -1,20 +1,35 @@
+import { zodResolver } from "@hookform/resolvers/zod"
 import { Button, Card, Grid, TextField, Typography } from "@mui/material"
-import { FormEvent } from "react"
+import { SubmitHandler, useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
 import imagemAnimes from '../../../assets/images/Selecta-Visión-Amazon-Prime-Video.jpg'
 import { Base } from "../elementoHTMLEstatico"
+import './cadastro.css'
+import { cadastroFormData, cadastroSchema } from "./cadastroSchema"
 
 const Cadastro = () => {
   const navigate = useNavigate()
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+  // const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault()
+  //   navigate('/login')
+  // }
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<cadastroFormData>({
+    resolver: zodResolver(cadastroSchema),
+  })
+
+  const onsubmit: SubmitHandler<cadastroFormData> = async (data) => {
     navigate('/login')
   }
 
   return (
     <Base>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit(onsubmit)}>
         <img
           src={imagemAnimes}
           alt="Imagem contendo alguns atores em filmes de ação encontradas na plataforma da netflix"
@@ -36,30 +51,45 @@ const Cadastro = () => {
             label="Nome Completo"
             type="text"
             color="secondary"
+            {...register('nome_completo')}
+            error={!!errors.nome_completo}
+            helperText={errors.nome_completo?.message}
           />
           <TextField
             variant="outlined"
             label="Usuário"
             type="text"
             color="secondary"
+            {...register('usuario')}
+            error={!!errors.usuario}
+            helperText={errors.usuario?.message}
           />
           <TextField
             variant="outlined"
             label="Email"
             type="email"
             color="secondary"
+            {...register('email')}
+            error={!!errors.email}
+            helperText={errors.email?.message}
           />
           <TextField
             variant="outlined"
             label="Senha"
             type="password"
             color="secondary"
+            {...register('senha')}
+            error={!!errors.senha}
+            helperText={errors.senha?.message}
           />
           <TextField
             variant="outlined"
             label="Repetir Senha"
             type="password"
             color="secondary"
+            {...register('repetirSenha')}
+            error={!!errors.repetirSenha}
+            helperText={errors.repetirSenha?.message}
           />
           <Grid container item display={"flex"} justifyContent={"space-between"}>
             <Button
