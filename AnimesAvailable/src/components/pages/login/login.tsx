@@ -12,7 +12,13 @@ const Login = () => {
     e.preventDefault()
     const usuario = {
       logado: true,
-      nome: "teste"
+      usuario: "teste",
+      jogoPreferido: "The Legends of Neverland",
+      animePreferido: "Code Geass, Toaru Series, etc",
+      hobby: "jogar e assistir animes",
+      nomeCompleto: "Conta de Teste",
+      email: "teste@gmail.com",
+      senha: "teste"
     }
     sessionStorage.setItem("usuario", JSON.stringify(usuario))
     navigate('/animes/todos')

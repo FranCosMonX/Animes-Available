@@ -22,7 +22,13 @@ export const Header = () => {
       if (resultado) {
         const usuario: {
           logado: Boolean,
-          nome: string
+          nome: string,
+          jogoPreferido: string,
+          animePreferido: string,
+          hobby: string,
+          nomeCompleto: string,
+          email: string,
+          senha: string
         } = JSON.parse(resultado)
 
         console.log(usuario.logado)

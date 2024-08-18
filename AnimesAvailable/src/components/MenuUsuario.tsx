@@ -12,8 +12,8 @@ import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function MenuUsuario() {
-  const navigate = useNavigate()
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const navigate = useNavigate()
   const open = Boolean(anchorEl);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
