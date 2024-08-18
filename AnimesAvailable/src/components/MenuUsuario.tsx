@@ -51,9 +51,7 @@ export default function MenuUsuario() {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem onClick={() => {
-          console.log("pagina do usuario")
-        }}>
+        <MenuItem onClick={() => navigate('/perfil')}>
           <Grid container display={'flex'} gap={1} alignItems={'center'}>
             <Grid item><Avatar /></Grid>
             <Grid item><Typography>Teste</Typography></Grid>
