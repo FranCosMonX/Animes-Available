@@ -4,7 +4,6 @@ import { SubmitHandler, useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
 import imagemAnimes from '../../../assets/images/Selecta-Visión-Amazon-Prime-Video.jpg'
 import { Base } from "../elementoHTMLEstatico"
-import './cadastro.css'
 import { cadastroFormData, cadastroSchema } from "./cadastroSchema"
 
 const Cadastro = () => {
@@ -29,8 +28,9 @@ const Cadastro = () => {
 
   return (
     <Base>
-      <form onSubmit={handleSubmit(onsubmit)}>
+      <form className="formIntro" onSubmit={handleSubmit(onsubmit)}>
         <img
+          className="planoDeFundoPaginasIniciais"
           src={imagemAnimes}
           alt="Imagem contendo alguns atores em filmes de ação encontradas na plataforma da netflix"
         />

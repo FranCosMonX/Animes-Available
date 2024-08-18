@@ -1,8 +1,0 @@
-form {
-  position: 'relative';
-}
-
-form img {
-  filter: brightness(50%);
-  max-width: 100%;
-}

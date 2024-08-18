@@ -4,7 +4,6 @@ import { SubmitHandler, useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
 import imagemAnimes from '../../../assets/images/Selecta-Visión-Amazon-Prime-Video.jpg'
 import { Base } from "../elementoHTMLEstatico"
-import './login.css'
 import { loginFormData, loginSchema } from "./loginSchema"
 
 const Login = () => {
@@ -52,8 +51,9 @@ const Login = () => {
 
   return (
     <Base>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form className="formIntro" onSubmit={handleSubmit(onSubmit)}>
         <img
+          className="planoDeFundoPaginasIniciais"
           src={imagemAnimes}
           alt="Imagem contendo alguns atores em filmes de ação encontradas na plataforma da netflix"
         />
