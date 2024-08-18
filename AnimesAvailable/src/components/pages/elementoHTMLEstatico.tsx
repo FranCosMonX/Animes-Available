@@ -1,6 +1,7 @@
 import { Button, Grid, Typography } from "@mui/material";
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import MenuUsuario from "../MenuUsuario";
 
 const BaseStyle: React.CSSProperties | undefined = {
   display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'
@@ -11,7 +12,30 @@ interface propBase {
 }
 
 export const Header = () => {
+  const [inicializado, setInicializado] = useState(false)
+  const [usuarioLogado, setUsuarioLogado] = useState(false)
   const navigate = useNavigate()
+
+  useEffect(() => {
+    if (!usuarioLogado) {
+      const resultado = sessionStorage.getItem('usuario')
+      if (resultado) {
+        const usuario: {
+          logado: Boolean,
+          nome: string
+        } = JSON.parse(resultado)
+
+        console.log(usuario.logado)
+        if (usuario.logado)
+          setUsuarioLogado(true)
+        else
+          setUsuarioLogado(false)
+      } else {
+        setUsuarioLogado(false)
+      }
+      setInicializado(true)
+    }
+  }, [inicializado])
 
   return (
     <Grid container
@@ -22,17 +46,11 @@ export const Header = () => {
     >
       <Grid item>
         <Button type="button" onClick={() => {
-          const resultado = sessionStorage.getItem('usuario')
-          if (resultado) {
-            const usuario: {
-              logado: Boolean,
-              nome: string
-            } = JSON.parse(resultado)
 
-            console.log(usuario.logado)
-            if (usuario.logado)
-              navigate('/animes/todos')
-          } else {
+          console.log(usuarioLogado)
+          if (usuarioLogado)
+            navigate('/animes/todos')
+          else {
             navigate('/')
           }
 
@@ -40,10 +58,14 @@ export const Header = () => {
           <Typography fontWeight={"bold"}>Avaliador de Filmes</Typography>
         </Button>
       </Grid>
-      <Grid item display={"flex"} gap={2}>
-        <Button color="secondary" variant="contained" onClick={() => navigate('/cadastro')}>CADASTRAR</Button>
-        <Button color="secondary" variant="contained" onClick={() => navigate('/login')}> LOGIN</Button>
-      </Grid>
+      {usuarioLogado && <MenuUsuario />}
+      {
+        !usuarioLogado &&
+        <Grid item display={"flex"} gap={2}>
+          <Button color="secondary" variant="contained" onClick={() => navigate('/cadastro')}>CADASTRAR</Button>
+          <Button color="secondary" variant="contained" onClick={() => navigate('/login')}> LOGIN</Button>
+        </Grid>
+      }
     </Grid >
   )
 }
