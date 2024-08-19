@@ -1,0 +1,23 @@
+@startuml
+
+class Usuario{
+    id: [string | number] auto complete
+    usuario: string not null
+    jogo_preferido: string
+    anime_preferido: string
+    hobby: string
+    nome_completo: string not null
+    emai: string not null
+    senha: string not null
+}
+
+class Anime{
+    id: [string | number] auto complete
+    nome: string not null
+    url_imagem: string not null
+    nota: float not null
+}
+
+Usuario "1..*" -- "0..*" Anime : ver Avaliações
+
+@enduml

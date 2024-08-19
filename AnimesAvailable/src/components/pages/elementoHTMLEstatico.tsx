@@ -61,7 +61,7 @@ export const Header = () => {
           }
 
         }}>
-          <Typography fontWeight={"bold"}>Avaliador de Filmes</Typography>
+          <Typography fontWeight={"bold"}>Animes Available</Typography>
         </Button>
       </Grid>
       {usuarioLogado && <MenuUsuario />}
