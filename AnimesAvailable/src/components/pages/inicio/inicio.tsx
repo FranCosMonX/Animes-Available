@@ -1,7 +1,6 @@
 import { Grid, Typography } from '@mui/material'
 import imagemAnimes from '../../../assets/images/Selecta-Visión-Amazon-Prime-Video.jpg'
 import { Base, Footer } from '../elementoHTMLEstatico'
-import './inicio.css'
 
 const Inicio = () => {
   return (
@@ -11,6 +10,7 @@ const Inicio = () => {
         className='main'
       >
         <img
+          className='img-inicio-logout'
           src={imagemAnimes}
           alt="Imagem contendo alguns atores em filmes de ação encontradas na plataforma da netflix"
         />
@@ -23,7 +23,7 @@ const Inicio = () => {
             top: '30%',
             right: '7%'
           }}
-        >Avalie seus filmes favoritos</Typography>
+        >Avalie seus animes favoritos</Typography>
       </Grid>
       <Footer />
     </Base>

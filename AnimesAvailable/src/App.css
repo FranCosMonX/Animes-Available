@@ -3,11 +3,20 @@ form {
   width: 100%;
 }
 
+.img-inicio-logout {
+  filter: brightness(50%);
+  width: 100%;
+  height: 80vh;
+  overflow: hidden;
+  object-fit: cover;
+  object-position: center;
+}
+
 .planoDeFundoPaginasIniciais {
   filter: brightness(50%);
   min-height: 'max-content';
   width: 100%;
-  height: 490px;
+  height: 93vh;
   overflow: hidden;
   object-fit: cover;
   object-position: center;
