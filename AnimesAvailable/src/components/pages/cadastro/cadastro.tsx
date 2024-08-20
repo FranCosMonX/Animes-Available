@@ -9,11 +9,6 @@ import { cadastroFormData, cadastroSchema } from "./cadastroSchema"
 const Cadastro = () => {
   const navigate = useNavigate()
 
-  // const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault()
-  //   navigate('/login')
-  // }
-
   const {
     register,
     handleSubmit,
