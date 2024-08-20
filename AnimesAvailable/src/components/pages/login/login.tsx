@@ -9,22 +9,6 @@ import { loginFormData, loginSchema } from "./loginSchema"
 const Login = () => {
   const navigate = useNavigate()
 
-  // const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault()
-  //   const usuario = {
-  //     logado: true,
-  //     usuario: "teste",
-  //     jogoPreferido: "The Legends of Neverland",
-  //     animePreferido: "Code Geass, Toaru Series, etc",
-  //     hobby: "jogar e assistir animes",
-  //     nomeCompleto: "Conta de Teste",
-  //     email: "teste@gmail.com",
-  //     senha: "teste"
-  //   }
-  //   sessionStorage.setItem("usuario", JSON.stringify(usuario))
-  //   navigate('/animes/todos')
-  // }
-
   const {
     register,
     handleSubmit,

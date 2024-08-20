@@ -9,6 +9,8 @@ class Usuario{
     nome_completo: string not null
     emai: string not null
     senha: string not null
+    createdAt: Date
+    updatedAt: Date
 }
 
 class Anime{
