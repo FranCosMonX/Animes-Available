@@ -23,8 +23,14 @@ export class AuthService {
       where: { usuario }
     })
 
-    if (usuario_com_email) throw new BadRequestException("Já existe um usuário com este email.")
-    if (nome_usuario_existente) throw new BadRequestException("Já existe um usuário com este nome de usuário.")
+    if (usuario_com_email) throw new BadRequestException({
+      mensagem: "Já existe um usuário com este email.",
+      entidade: "email"
+    })
+    if (nome_usuario_existente) throw new BadRequestException({
+      mensagem: "Já existe um usuário com este nome de usuário.",
+      entidade: "usuario"
+    })
 
 
     const senhaCriptografada = await this.hashPassword(senha)
