@@ -1,4 +1,5 @@
 import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../prisma/prisma.service';
 import { CadastroDTO } from './dto/cadastro.dto';
@@ -6,7 +7,7 @@ import { loginDTO } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService, private jwtService: JwtService) { }
 
   /**
    * Método para registrar as informações do usuário no banco de dados
@@ -53,11 +54,14 @@ export class AuthService {
 
     if (!usuarioExiste || !senhasIguais) throw new BadRequestException("Credenciais inválidas");
 
+    //obtendo token
+    const payload = { sub: usuarioExiste.id, username: usuarioExiste.usuario };
+
     return {
       mensagem: "Login bem sucedido",
       user: {
         id: usuarioExiste.id,
-        token: "token"
+        token: await this.jwtService.signAsync(payload)
       }
     }
   }
