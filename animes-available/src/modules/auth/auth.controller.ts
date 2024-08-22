@@ -1,19 +1,18 @@
-import { Body, Controller, Get } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
+import { AuthService } from './auth.service';
 import { CadastroDTO } from './dto/cadastro.dto';
 import { loginDTO } from './dto/login.dto';
 
 @Controller('auth')
 export class AuthController {
+  constructor(private readonly authService: AuthService) { }
 
-  @Get('cadastrar')
+  @Post('cadastrar')
   async cadastrar(@Body() dataDto: CadastroDTO) {
-    return {
-      data: dataDto,
-      message: "Usuário cadastrado com sucesso!"
-    }
+    return await this.authService.cadastro(dataDto);
   }
 
-  @Get('login')
+  @Post('login')
   async login(@Body() dataDto: loginDTO) {
     return {
       data: dataDto,
