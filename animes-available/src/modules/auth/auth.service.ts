@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../prisma/prisma.service';
 import { CadastroDTO } from './dto/cadastro.dto';
@@ -22,8 +22,8 @@ export class AuthService {
       where: { usuario }
     })
 
-    if (usuario_com_email) throw new BadRequestException("Já existe um usuário com este email.")
-    if (nome_usuario_existente) throw new BadRequestException("Já existe um usuário com este nome de usuário.")
+    if (usuario_com_email) throw new UnauthorizedException("Já existe um usuário com este email.")
+    if (nome_usuario_existente) throw new UnauthorizedException("Já existe um usuário com este nome de usuário.")
 
 
     const senhaCriptografada = await this.hashPassword(senha)
