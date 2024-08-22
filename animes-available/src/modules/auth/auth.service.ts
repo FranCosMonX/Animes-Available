@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../prisma/prisma.service';
 import { CadastroDTO } from './dto/cadastro.dto';
+import { loginDTO } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
@@ -34,6 +35,30 @@ export class AuthService {
     return {
       usuario: resultado,
       mensagem: "Cadastro realizado com sucesso"
+    }
+  }
+
+  /**
+   * Método para logar o usuário na aplicação
+   * @param data dados do usuário
+   * @returns 
+   */
+  async login(data: loginDTO) {
+    const { usuario, senha } = data
+
+    const usuarioExiste = await this.prisma.usuario.findFirst({
+      where: { usuario }
+    })
+    const senhasIguais = await bcrypt.compare(senha, usuarioExiste.senha);
+
+    if (!usuarioExiste || !senhasIguais) throw new BadRequestException("Credenciais inválidas");
+
+    return {
+      mensagem: "Login bem sucedido",
+      user: {
+        id: usuarioExiste.id,
+        token: "token"
+      }
     }
   }
 
