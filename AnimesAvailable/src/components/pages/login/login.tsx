@@ -20,6 +20,15 @@ const Login = () => {
   })
 
   const onSubmit: SubmitHandler<loginFormData> = async (data) => {
+    await api.post("/auth/login", data)
+      .then(response => {
+        api.defaults.headers.common.Authorization = `Bearer ${response.data.usuario.token}`
+        navigate('/animes/todos')
+      })
+      .catch(error => {
+        setError("usuario", { message: error.response.data.mensagem })
+        setError("senha", { message: error.response.data.mensagem })
+      })
     console.log(data)
     const usuario = {
       logado: true,
@@ -32,16 +41,6 @@ const Login = () => {
       senha: "teste"
     }
     sessionStorage.setItem("usuario", JSON.stringify(usuario))
-    await api.post("/auth/login", data)
-      .then(response => {
-        console.log(response)
-        navigate('/animes/todos')
-      })
-      .catch(error => {
-        console.log(error)
-        setError("usuario", { message: error.response.data.mensagem })
-        setError("senha", { message: error.response.data.mensagem })
-      })
   }
 
   return (
