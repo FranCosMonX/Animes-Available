@@ -67,7 +67,7 @@ export class AuthService {
 
     return {
       mensagem: "Login bem sucedido",
-      user: {
+      usuario: {
         id: usuarioExiste.id,
         token: await this.jwtService.signAsync(payload)
       }
