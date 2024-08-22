@@ -23,8 +23,8 @@ export class AuthService {
       where: { usuario }
     })
 
-    if (usuario_com_email) throw new UnauthorizedException("Já existe um usuário com este email.")
-    if (nome_usuario_existente) throw new UnauthorizedException("Já existe um usuário com este nome de usuário.")
+    if (usuario_com_email) throw new BadRequestException("Já existe um usuário com este email.")
+    if (nome_usuario_existente) throw new BadRequestException("Já existe um usuário com este nome de usuário.")
 
 
     const senhaCriptografada = await this.hashPassword(senha)
@@ -52,7 +52,7 @@ export class AuthService {
     })
     const senhasIguais = await bcrypt.compare(senha, usuarioExiste.senha);
 
-    if (!usuarioExiste || !senhasIguais) throw new BadRequestException("Credenciais inválidas");
+    if (!usuarioExiste || !senhasIguais) throw new UnauthorizedException("Credenciais inválidas");
 
     //obtendo token
     const payload = { sub: usuarioExiste.id, username: usuarioExiste.usuario };
