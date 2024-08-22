@@ -23,8 +23,14 @@ export class AuthService {
       where: { usuario }
     })
 
-    if (usuario_com_email) throw new BadRequestException("Já existe um usuário com este email.")
-    if (nome_usuario_existente) throw new BadRequestException("Já existe um usuário com este nome de usuário.")
+    if (usuario_com_email) throw new BadRequestException({
+      mensagem: "Já existe um usuário com este email.",
+      entidade: "email"
+    })
+    if (nome_usuario_existente) throw new BadRequestException({
+      mensagem: "Já existe um usuário com este nome de usuário.",
+      entidade: "usuario"
+    })
 
 
     const senhaCriptografada = await this.hashPassword(senha)
@@ -50,16 +56,18 @@ export class AuthService {
     const usuarioExiste = await this.prisma.usuario.findFirst({
       where: { usuario }
     })
+
+    if (!usuarioExiste) throw new UnauthorizedException("Credenciais inválidas");
     const senhasIguais = await bcrypt.compare(senha, usuarioExiste.senha);
 
-    if (!usuarioExiste || !senhasIguais) throw new UnauthorizedException("Credenciais inválidas");
+    if (!senhasIguais) throw new UnauthorizedException("Credenciais inválidas");
 
     //obtendo token
     const payload = { sub: usuarioExiste.id, username: usuarioExiste.usuario };
 
     return {
       mensagem: "Login bem sucedido",
-      user: {
+      usuario: {
         id: usuarioExiste.id,
         token: await this.jwtService.signAsync(payload)
       }

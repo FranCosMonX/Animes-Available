@@ -3,6 +3,7 @@ import { Button, Card, Grid, TextField, Typography } from "@mui/material"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
 import imagemAnimes from '../../../assets/images/Selecta-Visión-Amazon-Prime-Video.jpg'
+import { api } from "../../../common/api/config"
 import { Base } from "../elementoHTMLEstatico"
 import { loginFormData, loginSchema } from "./loginSchema"
 
@@ -13,11 +14,21 @@ const Login = () => {
     register,
     handleSubmit,
     formState: { errors },
+    setError
   } = useForm<loginFormData>({
     resolver: zodResolver(loginSchema),
   })
 
   const onSubmit: SubmitHandler<loginFormData> = async (data) => {
+    await api.post("/auth/login", data)
+      .then(response => {
+        api.defaults.headers.common.Authorization = `Bearer ${response.data.usuario.token}`
+        navigate('/animes/todos')
+      })
+      .catch(error => {
+        setError("usuario", { message: error.response.data.mensagem })
+        setError("senha", { message: error.response.data.mensagem })
+      })
     console.log(data)
     const usuario = {
       logado: true,
@@ -30,7 +41,6 @@ const Login = () => {
       senha: "teste"
     }
     sessionStorage.setItem("usuario", JSON.stringify(usuario))
-    navigate('/animes/todos')
   }
 
   return (
