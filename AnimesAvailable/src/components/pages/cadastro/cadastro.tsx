@@ -3,6 +3,7 @@ import { Button, Card, Grid, TextField, Typography } from "@mui/material"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
 import imagemAnimes from '../../../assets/images/Selecta-Visión-Amazon-Prime-Video.jpg'
+import { api } from "../../../common/api/config"
 import { Base } from "../elementoHTMLEstatico"
 import { cadastroFormData, cadastroSchema } from "./cadastroSchema"
 
@@ -13,12 +14,21 @@ const Cadastro = () => {
     register,
     handleSubmit,
     formState: { errors },
+    setError
   } = useForm<cadastroFormData>({
     resolver: zodResolver(cadastroSchema),
   })
 
   const onsubmit: SubmitHandler<cadastroFormData> = async (data) => {
-    navigate('/login')
+    await api.post("/auth/cadastrar", data)
+      .then(response => {
+        console.log(response)
+        navigate('/login')
+      })
+      .catch(error => {
+        console.error(error)
+      })
+
   }
 
   return (
