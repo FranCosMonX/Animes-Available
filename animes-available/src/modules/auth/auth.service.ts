@@ -56,9 +56,11 @@ export class AuthService {
     const usuarioExiste = await this.prisma.usuario.findFirst({
       where: { usuario }
     })
+
+    if (!usuarioExiste) throw new UnauthorizedException("Credenciais inválidas");
     const senhasIguais = await bcrypt.compare(senha, usuarioExiste.senha);
 
-    if (!usuarioExiste || !senhasIguais) throw new UnauthorizedException("Credenciais inválidas");
+    if (!senhasIguais) throw new UnauthorizedException("Credenciais inválidas");
 
     //obtendo token
     const payload = { sub: usuarioExiste.id, username: usuarioExiste.usuario };
