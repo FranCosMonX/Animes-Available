@@ -27,7 +27,8 @@ export class AuthService {
 
     const senhaCriptografada = await this.hashPassword(senha)
     const resultado = await this.prisma.usuario.create({
-      data: { usuario, email, nome_completo, senha: senhaCriptografada }
+      data: { usuario, email, nome_completo, senha: senhaCriptografada },
+      select: { id: true, usuario: true, email: true, nome_completo: true, updatedAt: true, createdAt: true }
     })
 
     return {
