@@ -26,7 +26,7 @@ const Cadastro = () => {
         navigate('/login')
       })
       .catch(error => {
-        console.error(error)
+        setError(error.response.data.entidade, { message: error.response.data.mensagem })
       })
 
   }
