@@ -20,10 +20,11 @@ O comportamento delas pode ser visto pelo seguinte diagrama de caso de uso:
 ## Ferramentas utilizadas
 
 * NodeJS: criação do projeto;
-* PNPM: gerenciamento de pacotes, uma versão melhorada do NPM.
+* PNPM: gerenciamento de pacotes, uma versão melhorada do NPM;
 * Vite: gerenciamento dos módulos;
 * MaterialUI: criação responsiva da interface de usuário;
 * Zod + HookForm: validação dos formulários;
+* Axios: gerenciar as requisições.
 
 ## Configuração do projeto
 
