@@ -74,6 +74,23 @@ export class UsersService {
     return this.removerDadosSensiveisOuNulos(usuario)
   }
 
+  async deleteAccount(userID: number, password: string) {
+    if (!password) throw new UnauthorizedException("É necessário informar a senha para realizar esta operação.");
+
+    const usuario = await this.prismaService.usuario.findFirst({
+      where: { id: userID }
+    })
+
+    const senhasIguais = await bcrypt.compare(password, usuario.senha);
+    if (!senhasIguais) throw new UnauthorizedException("Senha inválida.")
+
+    await this.prismaService.usuario.delete({
+      where: { id: userID }
+    })
+
+    return { mensagem: "Conta excluída com sucesso." }
+  }
+
   private removerDadosSensiveisOuNulos(dadosUsuario) {
     if (!dadosUsuario.anime_preferido) delete dadosUsuario.anime_preferido
     if (!dadosUsuario.jogo_preferido) delete dadosUsuario.jogo_preferido

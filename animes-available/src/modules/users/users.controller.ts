@@ -1,5 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Patch } from '@nestjs/common';
-import { Public } from '../auth/auth.decorator';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch } from '@nestjs/common';
 import { InformacoesPessoaisDTO } from './dto/informacoesPessoais.dto';
 import { InformacoesPublicasDTO } from './dto/InformacoesPublicas.dto';
 import { SenhaDTO } from './dto/Senha.dto';
@@ -27,10 +26,15 @@ export class UsersController {
     return await this.usersService.setPessoalInformation(parseInt(userID), data)
   }
 
-  @Public()
   @HttpCode(HttpStatus.OK)
   @Patch(':id/perfil/senha')
   async atualizarSenha(@Param('id') userID: string, @Body() data: SenhaDTO) {
     return await this.usersService.setPassword(parseInt(userID), data)
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Delete(':id')
+  async deletarConta(@Param('id') userID: string, @Body() data: { senha: string }) {
+    return await this.usersService.deleteAccount(parseInt(userID), data.senha)
   }
 }
