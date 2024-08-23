@@ -1,12 +1,14 @@
 import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
+import { AuthService } from '../auth/auth.service';
 import { PrismaService } from '../prisma/prisma.service';
-import { InformacoesPublicasDTO } from './dto/InformacoesPublicas.dto';
 import { InformacoesPessoaisDTO } from './dto/informacoesPessoais.dto';
+import { InformacoesPublicasDTO } from './dto/InformacoesPublicas.dto';
+import { SenhaDTO } from './dto/Senha.dto';
 
 @Injectable()
 export class UsersService {
-  constructor(private prismaService: PrismaService) { }
+  constructor(private prismaService: PrismaService, private authService: AuthService) { }
 
   async MyInformation(id: number) {
 
@@ -42,12 +44,31 @@ export class UsersService {
     })
 
     const senhasIguais = await bcrypt.compare(data.senha, usuarioEncontrado.senha);
-    if (!senhasIguais) throw new UnauthorizedException("Senhas inválidas")
+    if (!senhasIguais) throw new UnauthorizedException("Senha inválida")
 
     const dados = { email: data.email, nome_completo: data.nome_completo }
     const usuario = await this.prismaService.usuario.update({
       where: { id: userID },
       data: dados
+    })
+
+    return this.removerDadosSensiveisOuNulos(usuario)
+  }
+
+  async setPassword(userID: number, data: SenhaDTO) {
+    const usuarioEncontrado = await this.prismaService.usuario.findFirst({
+      where: { id: userID }
+    })
+
+    const senhasIguais = await bcrypt.compare(data.senha, usuarioEncontrado.senha);
+    if (!senhasIguais) throw new UnauthorizedException({
+      entidade: "senha",
+      mensagem: "Senha original inválida."
+    })
+
+    const usuario = await this.prismaService.usuario.update({
+      where: { id: userID },
+      data: { senha: await this.authService.hashPassword(data.nova_senha) }
     })
 
     return this.removerDadosSensiveisOuNulos(usuario)

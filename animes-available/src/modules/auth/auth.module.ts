@@ -22,6 +22,7 @@ import { jwtConstants } from './constants';
       provide: APP_GUARD,
       useClass: AuthGuard,
     },],
-  controllers: [AuthController]
+  controllers: [AuthController],
+  exports: [AuthService]
 })
 export class AuthModule { }
