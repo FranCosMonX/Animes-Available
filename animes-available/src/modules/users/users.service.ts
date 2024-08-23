@@ -1,6 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../prisma/prisma.service';
 import { InformacoesPublicasDTO } from './dto/InformacoesPublicas.dto';
+import { InformacoesPessoaisDTO } from './dto/informacoesPessoais.dto';
 
 @Injectable()
 export class UsersService {
@@ -26,6 +28,26 @@ export class UsersService {
     const usuario = await this.prismaService.usuario.update({
       where: { id: userID },
       data: data
+    })
+
+    return this.removerDadosSensiveisOuNulos(usuario)
+  }
+
+  async setPessoalInformation(userID: number, data: InformacoesPessoaisDTO) {
+    if (!("email" in data) && !("nome_completo" in data))
+      throw new BadRequestException("É oborigatório que tenha ao menos um dos campos preenchidos: email ou nome_completo")
+
+    const usuarioEncontrado = await this.prismaService.usuario.findFirst({
+      where: { id: userID }
+    })
+
+    const senhasIguais = await bcrypt.compare(data.senha, usuarioEncontrado.senha);
+    if (!senhasIguais) throw new UnauthorizedException("Senhas inválidas")
+
+    const dados = { email: data.email, nome_completo: data.nome_completo }
+    const usuario = await this.prismaService.usuario.update({
+      where: { id: userID },
+      data: dados
     })
 
     return this.removerDadosSensiveisOuNulos(usuario)
