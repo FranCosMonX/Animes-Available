@@ -24,12 +24,12 @@ export class AuthService {
     })
 
     if (usuario_com_email) throw new BadRequestException({
-      mensagem: "Já existe um usuário com este email.",
-      entidade: "email"
+      message: "Já existe um usuário com este email.",
+      entity: "email"
     })
     if (nome_usuario_existente) throw new BadRequestException({
-      mensagem: "Já existe um usuário com este nome de usuário.",
-      entidade: "usuario"
+      message: "Já existe um usuário com este nome de usuário.",
+      entity: "usuario"
     })
 
 

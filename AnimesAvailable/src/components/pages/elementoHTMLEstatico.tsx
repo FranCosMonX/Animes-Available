@@ -1,6 +1,7 @@
 import { Button, Grid, Typography } from "@mui/material";
 import { ReactNode, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Usuario } from "../../@types/usuario.type";
 import MenuUsuario from "../MenuUsuario";
 
 const BaseStyle: React.CSSProperties | undefined = {
@@ -13,31 +14,33 @@ interface propBase {
 
 export const Header = () => {
   const [inicializado, setInicializado] = useState(false)
-  const [usuarioLogado, setUsuarioLogado] = useState(false)
+  const [usuarioLogado, setUsuarioLogado] = useState<{ logado: boolean, usuario: string }>({
+    logado: false, usuario: ""
+  })
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (!usuarioLogado) {
+    if (!usuarioLogado.logado && !inicializado) {
       const resultado = sessionStorage.getItem('usuario')
       if (resultado) {
-        const usuario: {
-          logado: Boolean,
-          nome: string,
-          jogoPreferido: string,
-          animePreferido: string,
-          hobby: string,
-          nomeCompleto: string,
-          email: string,
-          senha: string
-        } = JSON.parse(resultado)
+        const usuario: Usuario = JSON.parse(resultado)
 
         console.log(usuario.logado)
         if (usuario.logado)
-          setUsuarioLogado(true)
+          setUsuarioLogado({
+            logado: true,
+            usuario: usuario.usuario
+          })
         else
-          setUsuarioLogado(false)
+          setUsuarioLogado({
+            usuario: "",
+            logado: false
+          })
       } else {
-        setUsuarioLogado(false)
+        setUsuarioLogado({
+          usuario: "",
+          logado: false
+        })
       }
       setInicializado(true)
     }
@@ -64,9 +67,9 @@ export const Header = () => {
           <Typography fontWeight={"bold"}>Animes Available</Typography>
         </Button>
       </Grid>
-      {usuarioLogado && <MenuUsuario />}
+      {usuarioLogado.logado && <MenuUsuario usuario={usuarioLogado.usuario} />}
       {
-        !usuarioLogado &&
+        !usuarioLogado.logado &&
         <Grid item display={"flex"} gap={2}>
           <Button color="secondary" variant="contained" onClick={() => navigate('/cadastro')}>CADASTRAR</Button>
           <Button color="secondary" variant="contained" onClick={() => navigate('/login')}> LOGIN</Button>
