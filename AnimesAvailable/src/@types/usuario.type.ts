@@ -10,3 +10,9 @@ export interface Usuario {
   updatedAt: Date;
   createdAt: Date;
 }
+
+export interface ResumoUsuario {
+  id: number;
+  logado?: boolean;
+  usuario: string;
+}

@@ -1,7 +1,7 @@
 import { Button, Grid, Typography } from "@mui/material";
 import { ReactNode, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Usuario } from "../../@types/usuario.type";
+import { ResumoUsuario } from "../../@types/usuario.type";
 import MenuUsuario from "../MenuUsuario";
 
 const BaseStyle: React.CSSProperties | undefined = {
@@ -23,7 +23,7 @@ export const Header = () => {
     if (!usuarioLogado.logado && !inicializado) {
       const resultado = sessionStorage.getItem('usuario')
       if (resultado) {
-        const usuario: Usuario = JSON.parse(resultado)
+        const usuario: ResumoUsuario = JSON.parse(resultado)
 
         console.log(usuario.logado)
         if (usuario.logado)
