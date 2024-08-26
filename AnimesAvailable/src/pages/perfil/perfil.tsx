@@ -6,6 +6,7 @@ import { api } from "../../common/api/config";
 import { useHandleLogout } from "../../common/app/auth";
 import { Base } from "../../components/elementoHTMLEstatico";
 import MensagemDoSistema from "../../components/system/mensagem";
+import EditarInfosPessoais from "./editarInfoPessoais";
 import EditarPerfil from "./editarPerfil";
 
 /**
@@ -102,9 +103,58 @@ export default function Perfil() {
   }
 
   const handleEditarPerfil = () => {
-    setBtnAtualizar({ ...btnAtualizar, infoPublica: true })
+    setBtnAtualizar({
+      infoPrivada: false,
+      infoPublica: true,
+      senha: false
+    })
     setModalOpen(true)
     console.log(btnAtualizar)
+  }
+
+  const handleEditarInfosPrivadas = () => {
+    setBtnAtualizar({
+      infoPrivada: true,
+      infoPublica: false,
+      senha: false
+    })
+    setModalOpen(true)
+    console.log(btnAtualizar)
+  }
+
+  const handleModal = () => {
+    let componente: JSX.Element;
+    if (!dadosUsuario) {
+      console.log("Erro, sem dados do usuario")
+      return false
+    }
+
+    if (btnAtualizar.infoPublica)
+      componente = (
+        <EditarPerfil updatedAt={dadosUsuario.updatedAt} />
+      )
+    else
+      componente = (
+        <EditarInfosPessoais updatedAt={dadosUsuario.updatedAt} />
+      )
+
+    return (
+      <Modal
+        open={modalOpen}
+        onClose={() => {
+          setModalOpen(false)
+          perfil.button.infoPublica = false
+        }}
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          height: "maxContent",
+          alignItems: "center"
+        }}
+      >
+        {componente}
+      </Modal>
+    )
   }
 
   return (
@@ -140,7 +190,7 @@ export default function Perfil() {
               {
                 <Grid item display={'flex'} gap={2} justifyContent={'center'}>
                   <Button color="secondary" variant="contained" type="button" disabled={emProcessamento} onClick={handleEditarPerfil}>Editar Perfil</Button>
-                  <Button color="secondary" variant="contained" type="button" disabled={emProcessamento}>Editar Informações Pessoais</Button>
+                  <Button color="secondary" variant="contained" type="button" disabled={emProcessamento} onClick={handleEditarInfosPrivadas}>Editar Informações Pessoais</Button>
                   <Button color="secondary" variant="contained" type="button" disabled={emProcessamento}>Alterar Senha</Button>
                   <Button variant="contained" type="button" disabled={emProcessamento}>Encerrar Conta</Button>
                 </Grid>
@@ -158,21 +208,11 @@ export default function Perfil() {
           />
         }
       </Base>
-      {modalOpen && dadosUsuario &&
-        <Modal
-          open={modalOpen}
-          onClose={() => {
-            setModalOpen(false)
-            perfil.button.infoPublica = false
-          }}
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center"
-          }}
-        >
-          <EditarPerfil updatedAt={dadosUsuario.updatedAt} />
-        </Modal>
+      {
+        modalOpen &&
+        dadosUsuario &&
+        (btnAtualizar.infoPublica || btnAtualizar.infoPrivada || btnAtualizar.senha) &&
+        handleModal()
       }
     </React.Fragment>
   )
