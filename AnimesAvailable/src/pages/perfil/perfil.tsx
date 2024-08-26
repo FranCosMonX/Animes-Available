@@ -6,6 +6,7 @@ import { api } from "../../common/api/config";
 import { useHandleLogout } from "../../common/app/auth";
 import { Base } from "../../components/elementoHTMLEstatico";
 import MensagemDoSistema from "../../components/system/mensagem";
+import AlterarSenha from "./alterarSenha";
 import EditarInfosPessoais from "./editarInfoPessoais";
 import EditarPerfil from "./editarPerfil";
 
@@ -103,6 +104,7 @@ export default function Perfil() {
   }
 
   const handleEditarPerfil = () => {
+    setModalOpen(false)
     setBtnAtualizar({
       infoPrivada: false,
       infoPublica: true,
@@ -113,10 +115,22 @@ export default function Perfil() {
   }
 
   const handleEditarInfosPrivadas = () => {
+    setModalOpen(false)
     setBtnAtualizar({
       infoPrivada: true,
       infoPublica: false,
       senha: false
+    })
+    setModalOpen(true)
+    console.log(btnAtualizar)
+  }
+
+  const handleAlterarSenha = () => {
+    setModalOpen(false)
+    setBtnAtualizar({
+      infoPrivada: false,
+      infoPublica: false,
+      senha: true
     })
     setModalOpen(true)
     console.log(btnAtualizar)
@@ -133,10 +147,15 @@ export default function Perfil() {
       componente = (
         <EditarPerfil updatedAt={dadosUsuario.updatedAt} />
       )
-    else
+    else if (btnAtualizar.infoPrivada)
       componente = (
         <EditarInfosPessoais updatedAt={dadosUsuario.updatedAt} />
       )
+    else
+      componente = (
+        <AlterarSenha updatedAt={dadosUsuario.updatedAt} />
+      )
+
 
     return (
       <Modal
@@ -191,7 +210,7 @@ export default function Perfil() {
                 <Grid item display={'flex'} gap={2} justifyContent={'center'}>
                   <Button color="secondary" variant="contained" type="button" disabled={emProcessamento} onClick={handleEditarPerfil}>Editar Perfil</Button>
                   <Button color="secondary" variant="contained" type="button" disabled={emProcessamento} onClick={handleEditarInfosPrivadas}>Editar Informações Pessoais</Button>
-                  <Button color="secondary" variant="contained" type="button" disabled={emProcessamento}>Alterar Senha</Button>
+                  <Button color="secondary" variant="contained" type="button" disabled={emProcessamento} onClick={handleAlterarSenha}>Alterar Senha</Button>
                   <Button variant="contained" type="button" disabled={emProcessamento}>Encerrar Conta</Button>
                 </Grid>
               }
