@@ -29,3 +29,16 @@ form {
   object-fit: cover;
   object-position: center;
 }
+
+/* ANIMES */
+/* ANIME */
+#cardAnime img {
+  width: 190px;
+  height: 270px;
+  object-fit: cover;
+  /*manter a proporção da imagem e ajustando para cobrir toda a área*/
+  object-position: center;
+  /*centralizar a imagem*/
+  overflow: hidden;
+  /*Garante que qualquer parte da imagem que ultrapasse os limites do contêiner seja cortada e não exibida*/
+}

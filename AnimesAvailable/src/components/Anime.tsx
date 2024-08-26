@@ -1,4 +1,5 @@
 import { Typography } from "@mui/material";
+import './styles/Anime.css';
 
 interface Anime {
   id: number;
@@ -15,14 +16,6 @@ interface AnimeParam {
   anime: Anime;
 }
 
-const animeStyle: React.CSSProperties = {
-  width: '190px',
-  height: '270px',
-  objectFit: 'cover', //manter a proporção da imagem e ajustando para cobrir toda a área
-  objectPosition: 'center', //centralizar a imagem
-  overflow: 'hidden' //Garante que qualquer parte da imagem que ultrapasse os limites do contêiner seja cortada e não exibida
-}
-
 const Anime = ({ anime }: AnimeParam) => {
   return (
     <div id="cardAnime">
@@ -31,7 +24,6 @@ const Anime = ({ anime }: AnimeParam) => {
         <Typography variant="body2" textAlign={"center"}>{anime.nota}</Typography>
       </div>
       <img
-        style={animeStyle}
         src={anime.uri}
         alt={anime.alt}
       />
