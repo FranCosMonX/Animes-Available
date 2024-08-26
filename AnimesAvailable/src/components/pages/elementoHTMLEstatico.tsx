@@ -51,14 +51,11 @@ export const Header = () => {
     >
       <Grid item>
         <Button type="button" onClick={() => {
-
-          console.log(usuarioLogado)
-          if (usuarioLogado)
+          if (usuarioLogado.logado)
             navigate('/animes/todos')
           else {
             navigate('/')
           }
-
         }}>
           <Typography fontWeight={"bold"}>Animes Available</Typography>
         </Button>
