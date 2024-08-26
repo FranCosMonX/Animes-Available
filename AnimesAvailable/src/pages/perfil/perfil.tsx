@@ -1,11 +1,12 @@
-import { AlertColor, Button, Card, CardContent, Divider, Grid, LinearProgress, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { AlertColor, Button, Card, CardContent, Divider, Grid, LinearProgress, Modal, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import { MensagemDoSistemaParams } from "../../@types/sistema.type";
 import { ResumoUsuario, Usuario as User } from "../../@types/usuario.type";
 import { api } from "../../common/api/config";
 import { useHandleLogout } from "../../common/app/auth";
 import { Base } from "../../components/elementoHTMLEstatico";
 import MensagemDoSistema from "../../components/system/mensagem";
+import EditarPerfil from "./editarPerfil";
 
 /**
  * Em milissegundo
@@ -13,20 +14,37 @@ import MensagemDoSistema from "../../components/system/mensagem";
 const TEMPO_ESPERA_MENSAGEM = 5000
 const TEMPO_MENSAGEM_VISIVEL = 4000
 
+export const perfil = {
+  button: {
+    infoPublica: false
+  }
+}
+
 export default function Perfil() {
+  const [emProcessamento, setEmProcessamento] = useState(false) //Mostrar ao usuário que esta havendo algum processamento
   const [inicializado, setInicializado] = useState(false) //configurações iniciais obrigatórias
   const [dadosUsuario, setDadosUsuario] = useState<User>()
-  const [emProcessamento, setEmProcessamento] = useState(false) //Mostrar ao usuário que esta havendo algum processamento
+  const [modalOpen, setModalOpen] = useState(false)
+  const [logout, setLogout] = useState(false)
+  const handleLogout = useHandleLogout()
   const [msgSistema, setMsgSistema] = useState<MensagemDoSistemaParams>({
     message: '', severity: "error", time_ms: TEMPO_MENSAGEM_VISIVEL, visible: false
   })
-  const [logout, setLogout] = useState(false)
-  const handleLogout = useHandleLogout()
+  const [btnAtualizar, setBtnAtualizar] = useState<{
+    infoPublica: boolean, infoPrivada: boolean, senha: boolean
+  }>({ infoPrivada: false, infoPublica: perfil.button.infoPublica, senha: false })
 
   useEffect(() => {
     if (logout)
       handleLogout()
   }, [logout, handleLogout])
+
+  useEffect(() => {
+    setBtnAtualizar(prevState => ({
+      ...prevState,
+      infoPublica: perfil.button.infoPublica
+    }));
+  }, [perfil.button.infoPublica]);
 
   useEffect(() => {
     if (!inicializado) {
@@ -84,59 +102,78 @@ export default function Perfil() {
   }
 
   const handleEditarPerfil = () => {
-
-    //setEmProcessamento(true)
+    setBtnAtualizar({ ...btnAtualizar, infoPublica: true })
+    setModalOpen(true)
+    console.log(btnAtualizar)
   }
 
   return (
-    <Base>
-      <Card sx={{ background: 'none', width: '90%', margin: '25px' }}>
-        <CardContent>
-          <Typography color={'primary'} textAlign={'center'} variant="h4">INFORMAÇÕES DE USUÁRIO</Typography>
-          <Grid container display={'flex'} flexDirection={'column'} gap={1} marginTop={2}>
-            <Grid item>
-              <Typography color={'primary'}>Usuário: {dadosUsuario?.usuario}</Typography>
-            </Grid>
-            <Grid item>
-              <Typography color={'primary'}>Jogo preferido: {dadosUsuario?.jogo_preferido ? dadosUsuario?.jogo_preferido : ""}</Typography>
-            </Grid>
-            <Grid item>
-              <Typography color={'primary'}>Anime preferido: {dadosUsuario?.anime_preferido ? dadosUsuario?.anime_preferido : ""}</Typography>
-            </Grid>
-            <Grid item>
-              <Typography color={'primary'}>Hobby: {dadosUsuario?.hobby ? dadosUsuario?.hobby : ""}</Typography>
-            </Grid>
-            <Divider sx={{ backgroundColor: 'white' }} />
-            <Grid item>
-              <Typography color={'primary'}>Nome Completo: {dadosUsuario?.nome_completo}</Typography>
-            </Grid>
-            <Grid item>
-              <Typography color={'primary'}>Email: {dadosUsuario?.email}</Typography>
-            </Grid>
-            <Grid item>
-              <Typography color={'primary'}>Senha: *********</Typography>
-            </Grid>
-            {emProcessamento && <LinearProgress color='secondary' />}
-            {
-              <Grid item display={'flex'} gap={2} justifyContent={'center'}>
-                <Button color="secondary" variant="contained" type="button" disabled={emProcessamento} onClick={handleEditarPerfil}>Editar Perfil</Button>
-                <Button color="secondary" variant="contained" type="button" disabled={emProcessamento}>Editar Informações Pessoais</Button>
-                <Button color="secondary" variant="contained" type="button" disabled={emProcessamento}>Alterar Senha</Button>
-                <Button variant="contained" type="button" disabled={emProcessamento}>Encerrar Conta</Button>
+    <React.Fragment>
+      <Base>
+        <Card sx={{ background: 'none', width: '90%', margin: '25px' }}>
+          <CardContent>
+            <Typography color={'primary'} textAlign={'center'} variant="h4">INFORMAÇÕES DE USUÁRIO</Typography>
+            <Grid container display={'flex'} flexDirection={'column'} gap={1} marginTop={2}>
+              <Grid item>
+                <Typography color={'primary'}>Usuário: {dadosUsuario?.usuario}</Typography>
               </Grid>
-            }
-          </Grid>
-        </CardContent>
-      </Card>
-      {
-        msgSistema.visible &&
-        <MensagemDoSistema
-          visible={false}
-          message={msgSistema.message}
-          severity={msgSistema.severity}
-          time_ms={msgSistema.time_ms}
-        />
+              <Grid item>
+                <Typography color={'primary'}>Jogo preferido: {dadosUsuario?.jogo_preferido ? dadosUsuario?.jogo_preferido : ""}</Typography>
+              </Grid>
+              <Grid item>
+                <Typography color={'primary'}>Anime preferido: {dadosUsuario?.anime_preferido ? dadosUsuario?.anime_preferido : ""}</Typography>
+              </Grid>
+              <Grid item>
+                <Typography color={'primary'}>Hobby: {dadosUsuario?.hobby ? dadosUsuario?.hobby : ""}</Typography>
+              </Grid>
+              <Divider sx={{ backgroundColor: 'white' }} />
+              <Grid item>
+                <Typography color={'primary'}>Nome Completo: {dadosUsuario?.nome_completo}</Typography>
+              </Grid>
+              <Grid item>
+                <Typography color={'primary'}>Email: {dadosUsuario?.email}</Typography>
+              </Grid>
+              <Grid item>
+                <Typography color={'primary'}>Senha: *********</Typography>
+              </Grid>
+              {emProcessamento && <LinearProgress color='secondary' />}
+              {
+                <Grid item display={'flex'} gap={2} justifyContent={'center'}>
+                  <Button color="secondary" variant="contained" type="button" disabled={emProcessamento} onClick={handleEditarPerfil}>Editar Perfil</Button>
+                  <Button color="secondary" variant="contained" type="button" disabled={emProcessamento}>Editar Informações Pessoais</Button>
+                  <Button color="secondary" variant="contained" type="button" disabled={emProcessamento}>Alterar Senha</Button>
+                  <Button variant="contained" type="button" disabled={emProcessamento}>Encerrar Conta</Button>
+                </Grid>
+              }
+            </Grid>
+          </CardContent>
+        </Card>
+        {
+          msgSistema.visible &&
+          <MensagemDoSistema
+            visible={false}
+            message={msgSistema.message}
+            severity={msgSistema.severity}
+            time_ms={msgSistema.time_ms}
+          />
+        }
+      </Base>
+      {modalOpen && dadosUsuario &&
+        <Modal
+          open={modalOpen}
+          onClose={() => {
+            setModalOpen(false)
+            perfil.button.infoPublica = false
+          }}
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center"
+          }}
+        >
+          <EditarPerfil updatedAt={dadosUsuario.updatedAt} />
+        </Modal>
       }
-    </Base>
+    </React.Fragment>
   )
 }
