@@ -1,36 +1,37 @@
-import { Alert, AlertColor } from '@mui/material';
+import { Alert } from '@mui/material';
 import Box from '@mui/material/Box';
-import Snackbar from '@mui/material/Snackbar';
+import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
 import * as React from 'react';
+import { MensagemDoSistemaParams } from '../../@types/sistema.type';
 
-interface MensagemDoSistemaParams {
-  mensagem: string;
-  tempo_ms: number;
-  severityMessage: AlertColor;
-}
+const MensagemDoSistema = ({ message, time_ms, severity }: MensagemDoSistemaParams) => {
+  const [open, setOpen] = React.useState(true)
 
-export default function MensagemDoSistema({ mensagem, tempo_ms, severityMessage }: MensagemDoSistemaParams) {
-  const [msgSistemaInicializado, setMsgSistemaInicializado] = React.useState(false)
-  const [openMsgSistemaInicializado, setOpenMsgSistemaInicializado] = React.useState(true)
-  React.useEffect(() => {
-    if (!msgSistemaInicializado) {
-      setTimeout(() => {
-        setOpenMsgSistemaInicializado(false)
-      }, tempo_ms)
-      setMsgSistemaInicializado(true)
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: SnackbarCloseReason,
+  ) => {
+    if (reason === 'clickaway') {
+      return;
     }
-  }, [msgSistemaInicializado])
+
+    setOpen(false);
+  };
 
   return (
-    <Box sx={{ width: 500 }}>
+    <Box sx={{ width: 300 }}>
       <Snackbar
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-        open={openMsgSistemaInicializado}
+        open={open}
+        onClose={handleClose}
+        autoHideDuration={time_ms}
       >
-        <Alert severity={severityMessage} sx={{ width: '100%' }}>
-          {mensagem}
+        <Alert severity={severity} variant='filled' onClose={handleClose} sx={{ width: '100%' }}>
+          {message}
         </Alert>
       </Snackbar>
     </Box>
   );
 }
+
+export default MensagemDoSistema

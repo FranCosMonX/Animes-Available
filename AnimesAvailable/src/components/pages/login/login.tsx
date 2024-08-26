@@ -3,7 +3,7 @@ import { Alert, Button, Card, Grid, TextField, Typography } from "@mui/material"
 import { useEffect, useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
-import { MensagemParams } from "../../../@types/sistema.type"
+import { AlertParams } from "../../../@types/sistema.type"
 import { Usuario } from "../../../@types/usuario.type"
 import imagemAnimes from '../../../assets/images/Selecta-Visión-Amazon-Prime-Video.jpg'
 import { api } from "../../../common/api/config"
@@ -12,7 +12,7 @@ import { loginFormData, loginSchema } from "./loginSchema"
 
 const Login = () => {
   const navigate = useNavigate()
-  const [msgSistema, setMsgSistema] = useState<MensagemParams>({
+  const [msgSistema, setMsgSistema] = useState<AlertParams>({
     message: "", visible: false, severity: "info"
   })
 

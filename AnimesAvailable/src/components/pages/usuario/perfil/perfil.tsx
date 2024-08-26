@@ -1,42 +1,63 @@
-import { Button, Card, CardContent, Divider, Grid, Typography } from "@mui/material";
+import { AlertColor, Button, Card, CardContent, Divider, Grid, LinearProgress, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Usuario as User } from "../../../../@types/usuario.type";
+import { MensagemDoSistemaParams } from "../../../../@types/sistema.type";
+import { ResumoUsuario, Usuario as User } from "../../../../@types/usuario.type";
 import { api } from "../../../../common/api/config";
+import { useHandleLogout } from "../../../../common/app/auth";
+import MensagemDoSistema from "../../../system/mensagem";
 import { Base } from "../../elementoHTMLEstatico";
 
-interface Usuario {
-  logado: Boolean;
-  usuario: string;
-  jogoPreferido: string;
-  animePreferido: string;
-  hobby: string;
-  nomeCompleto: string;
-  email: string;
-  senha?: string;
-  updatedAt: Date;
-  createdAt: Date;
-}
+/**
+ * Em milissegundo
+ */
+const TEMPO_ESPERA_MENSAGEM = 5000
+const TEMPO_MENSAGEM_VISIVEL = 4000
 
 export default function Perfil() {
-  const [inicializado, setInicializado] = useState(false)
+  const [inicializado, setInicializado] = useState(false) //configurações iniciais obrigatórias
   const [dadosUsuario, setDadosUsuario] = useState<User>()
-  const navigate = useNavigate()
+  const [emProcessamento, setEmProcessamento] = useState(false) //Mostrar ao usuário que esta havendo algum processamento
+  const [msgSistema, setMsgSistema] = useState<MensagemDoSistemaParams>({
+    message: '', severity: "error", time_ms: TEMPO_MENSAGEM_VISIVEL, visible: false
+  })
+  const [logout, setLogout] = useState(false)
+  const handleLogout = useHandleLogout()
+
+  useEffect(() => {
+    if (logout)
+      handleLogout()
+  }, [logout, handleLogout])
 
   useEffect(() => {
     if (!inicializado) {
+      setEmProcessamento(true)
       const obterDados = async () => {
-        await api.get(`/users/${8}`)
+        const usuarioResumido = sessionStorage.getItem('usuario')
+        if (!usuarioResumido) {
+
+          activateError("Usuário não encontrado!", "error");
+          setTimeout(() => {
+            setLogout(true)
+          }, TEMPO_ESPERA_MENSAGEM)
+          return
+        }
+        const usuario: ResumoUsuario = JSON.parse(usuarioResumido);
+
+        await api.get(`/users/${usuario.id}`)
           .then((response) => {
             const usuario: User = response.data.usuario
             usuario.logado = true;
             setDadosUsuario(usuario)
             sessionStorage.setItem('usuario', JSON.stringify(usuario))
             console.log(response)
+            setEmProcessamento(false)
           })
-          .catch((err) => {
-            sessionStorage.removeItem('usuario')
-            navigate('/')
+          .catch(() => {
+            activateError("Usuário não encontrado!", "error");
+
+            setTimeout(() => {
+              setLogout(true)
+            }, TEMPO_ESPERA_MENSAGEM)
           })
       }
       obterDados()
@@ -44,16 +65,27 @@ export default function Perfil() {
     }
   }, [inicializado])
 
-  const handleEditarPerfil = async () => {
-    await api.get(`/users/${8}`)
-      .then((response) => {
-        const usuario: User = response.data.usuario
-        setDadosUsuario(usuario)
-        console.log(response)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+  /**
+   * Habilitar campo de erro usando a mensagem do sistema
+   * @param message 
+   * @param severity 
+   */
+  const activateError = (message: string, severity: AlertColor) => {
+    setMsgSistema({
+      ...msgSistema,
+      severity: severity,
+      message: message,
+      visible: true
+    })
+
+    setTimeout(() => {
+      setMsgSistema({ ...msgSistema, visible: false })
+    }, TEMPO_ESPERA_MENSAGEM);
+  }
+
+  const handleEditarPerfil = () => {
+
+    //setEmProcessamento(true)
   }
 
   return (
@@ -84,15 +116,27 @@ export default function Perfil() {
             <Grid item>
               <Typography color={'primary'}>Senha: *********</Typography>
             </Grid>
-            <Grid item display={'flex'} gap={2} justifyContent={'center'}>
-              <Button color="secondary" variant="contained" type="button" onClick={handleEditarPerfil}>Editar Perfil</Button>
-              <Button color="secondary" variant="contained" type="button">Editar Informações Pessoais</Button>
-              <Button color="secondary" variant="contained" type="button">Alterar Senha</Button>
-              <Button variant="contained" type="button">Encerrar Conta</Button>
-            </Grid>
+            {emProcessamento && <LinearProgress color='secondary' />}
+            {
+              <Grid item display={'flex'} gap={2} justifyContent={'center'}>
+                <Button color="secondary" variant="contained" type="button" disabled={emProcessamento} onClick={handleEditarPerfil}>Editar Perfil</Button>
+                <Button color="secondary" variant="contained" type="button" disabled={emProcessamento}>Editar Informações Pessoais</Button>
+                <Button color="secondary" variant="contained" type="button" disabled={emProcessamento}>Alterar Senha</Button>
+                <Button variant="contained" type="button" disabled={emProcessamento}>Encerrar Conta</Button>
+              </Grid>
+            }
           </Grid>
         </CardContent>
       </Card>
+      {
+        msgSistema.visible &&
+        <MensagemDoSistema
+          visible={false}
+          message={msgSistema.message}
+          severity={msgSistema.severity}
+          time_ms={msgSistema.time_ms}
+        />
+      }
     </Base>
   )
 }
