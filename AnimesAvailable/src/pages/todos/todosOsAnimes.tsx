@@ -1,5 +1,5 @@
-import Catalogo from "../../../Catalogo";
-import { Base } from "../../elementoHTMLEstatico";
+import Catalogo from "../../components/Catalogo";
+import { Base } from "../../components/elementoHTMLEstatico";
 import './todosOsAnimes.css';
 
 interface AnimeInterface {

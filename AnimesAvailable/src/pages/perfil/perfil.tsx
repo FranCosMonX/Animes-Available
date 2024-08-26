@@ -1,11 +1,11 @@
 import { AlertColor, Button, Card, CardContent, Divider, Grid, LinearProgress, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { MensagemDoSistemaParams } from "../../../../@types/sistema.type";
-import { ResumoUsuario, Usuario as User } from "../../../../@types/usuario.type";
-import { api } from "../../../../common/api/config";
-import { useHandleLogout } from "../../../../common/app/auth";
-import MensagemDoSistema from "../../../system/mensagem";
-import { Base } from "../../elementoHTMLEstatico";
+import { MensagemDoSistemaParams } from "../../@types/sistema.type";
+import { ResumoUsuario, Usuario as User } from "../../@types/usuario.type";
+import { api } from "../../common/api/config";
+import { useHandleLogout } from "../../common/app/auth";
+import { Base } from "../../components/elementoHTMLEstatico";
+import MensagemDoSistema from "../../components/system/mensagem";
 
 /**
  * Em milissegundo

@@ -1,8 +1,8 @@
 import { Button, Grid, Typography } from "@mui/material";
 import { ReactNode, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ResumoUsuario } from "../../@types/usuario.type";
-import MenuUsuario from "../MenuUsuario";
+import { ResumoUsuario } from "../@types/usuario.type";
+import MenuUsuario from "./MenuUsuario";
 
 interface propBase {
   children: ReactNode;

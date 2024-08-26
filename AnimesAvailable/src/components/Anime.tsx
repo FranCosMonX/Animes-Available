@@ -1,5 +1,4 @@
 import { Typography } from "@mui/material";
-import './styles/Anime.css';
 
 interface Anime {
   id: number;

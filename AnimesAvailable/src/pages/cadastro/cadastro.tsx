@@ -2,9 +2,9 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Button, Card, Grid, TextField, Typography } from "@mui/material"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
-import imagemAnimes from '../../../assets/images/Selecta-Visión-Amazon-Prime-Video.jpg'
-import { api } from "../../../common/api/config"
-import { Base } from "../elementoHTMLEstatico"
+import imagemAnimes from '../../assets/images/Selecta-Visión-Amazon-Prime-Video.jpg'
+import { api } from "../../common/api/config"
+import { Base } from "../../components/elementoHTMLEstatico"
 import { cadastroFormData, cadastroSchema } from "./cadastroSchema"
 
 const Cadastro = () => {

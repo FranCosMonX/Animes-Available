@@ -3,11 +3,11 @@ import { Alert, Button, Card, Grid, TextField, Typography } from "@mui/material"
 import { useEffect, useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
-import { AlertParams } from "../../../@types/sistema.type"
-import { Usuario } from "../../../@types/usuario.type"
-import imagemAnimes from '../../../assets/images/Selecta-Visión-Amazon-Prime-Video.jpg'
-import { api } from "../../../common/api/config"
-import { Base } from "../elementoHTMLEstatico"
+import { AlertParams } from "../../@types/sistema.type"
+import { Usuario } from "../../@types/usuario.type"
+import imagemAnimes from '../../assets/images/Selecta-Visión-Amazon-Prime-Video.jpg'
+import { api } from "../../common/api/config"
+import { Base } from "../../components/elementoHTMLEstatico"
 import { loginFormData, loginSchema } from "./loginSchema"
 
 const Login = () => {
