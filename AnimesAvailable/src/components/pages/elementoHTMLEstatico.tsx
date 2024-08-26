@@ -4,10 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { ResumoUsuario } from "../../@types/usuario.type";
 import MenuUsuario from "../MenuUsuario";
 
-const BaseStyle: React.CSSProperties | undefined = {
-  display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'
-}
-
 interface propBase {
   children: ReactNode;
 }
@@ -96,7 +92,7 @@ export const Footer = () => {
 
 export const Base = ({ children }: propBase) => {
   return (
-    <div style={BaseStyle}>
+    <div className="base" >
       <Header />
       {children}
     </ div>
