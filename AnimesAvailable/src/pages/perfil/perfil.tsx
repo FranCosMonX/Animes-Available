@@ -81,17 +81,17 @@ export default function Perfil() {
    * @param message 
    * @param severity 
    */
-  const enableSystemMessage = (message: string, severity: AlertColor) => {
+  const enableSystemMessage = (message: string, severity: AlertColor, tempo_espera_para_processamento?: number, tempo_msnsagem_visivel?: number) => {
     setMsgSistema({
-      ...msgSistema,
       severity: severity,
       message: message,
-      visible: true
+      visible: true,
+      time_ms: tempo_msnsagem_visivel ? tempo_msnsagem_visivel : TEMPO_MENSAGEM_VISIVEL
     })
 
     setTimeout(() => {
       setMsgSistema({ ...msgSistema, visible: false })
-    }, TEMPO_ESPERA_MENSAGEM);
+    }, tempo_espera_para_processamento ? tempo_espera_para_processamento : TEMPO_ESPERA_MENSAGEM);
   }
 
   //Buttons
@@ -152,7 +152,12 @@ export default function Perfil() {
       )
     else if (btnAtualizar.infoPrivada)
       componente = (
-        <EditarInfosPessoais updatedAt={dadosUsuario.updatedAt} />
+        <EditarInfosPessoais
+          updatedAt={dadosUsuario.updatedAt}
+          userID={dadosUsuario.id}
+          atualizarDados={callbackFunctionModal}
+          enableSystemMessage={enableSystemMessage}
+        />
       )
     else
       componente = (

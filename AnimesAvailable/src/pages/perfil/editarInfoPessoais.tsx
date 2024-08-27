@@ -1,13 +1,16 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Button, Card, CardContent, CardHeader, Divider, Grid, TextField, Typography } from "@mui/material"
+import { Button, Card, CardContent, CardHeader, Checkbox, Divider, Grid, TextField, Typography } from "@mui/material"
+import { useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
+import { EditarPerfilParams } from "../../@types/usuario.type"
+import { api } from "../../common/api/config"
 import { editarInfoPessoalFormData, editarInfoPessoalSchema } from "./schema/editarInfoPessoal.schema"
 
-interface EditarParams {
-  updatedAt: Date
-}
-export default function EditarInfosPessoais({ updatedAt }: EditarParams) {
+export default function EditarInfosPessoais({ updatedAt, userID, atualizarDados, enableSystemMessage }: EditarPerfilParams) {
   const atualizadoEm = new Date(updatedAt)
+  const [sendData, setSendData] = useState<{ email: boolean, nome_completo: boolean }>({
+    email: false, nome_completo: false
+  })
 
   const {
     register,
@@ -18,6 +21,35 @@ export default function EditarInfosPessoais({ updatedAt }: EditarParams) {
   })
 
   const onSubmit: SubmitHandler<editarInfoPessoalFormData> = async (data) => {
+    if (
+      (sendData.email && (!data.email || data.email === '')) ||
+      (sendData.nome_completo && (!data.nome_completo || data.nome_completo === ''))
+    ) {
+      enableSystemMessage("O(s) campo(s) não pode(m) estar vazio(s).", 'error', 3100, 3000)
+      return
+    }
+
+    if (!sendData.email && !sendData.nome_completo) {
+      enableSystemMessage("É necessário preencher algum campo para atualizar os dados", "error", 3100, 3000)
+      return
+    }
+
+    let email, nome_completo, senha;
+    senha = data.senha
+    if (sendData.email) email = data.email
+    if (sendData.nome_completo) nome_completo = data.nome_completo
+
+    api.patch(`/users/${userID}/perfil/informacaoPessoal`, { email, nome_completo, senha })
+      .then((res) => {
+        console.log(res)
+        enableSystemMessage("Dados atualizados com sucesso!", 'success')
+        atualizarDados()
+      })
+      .catch((err) => {
+        console.log(err)
+        enableSystemMessage(!!err.response.data.message ? err.response.data.message : "Houve uma falha em atualizar os dados", 'error')
+        atualizarDados()
+      })
     console.log(data)
   }
 
@@ -48,29 +80,49 @@ export default function EditarInfosPessoais({ updatedAt }: EditarParams) {
           />
           <Divider />
           <Typography variant="body2">Informação(ões) a ser(em) atualizada(s).</Typography>
-          <TextField
-            label="Nome Completo"
-            type="text"
-            variant="outlined"
-            color="secondary"
-            {...register('nome_completo')}
-            error={!!errors.nome_completo}
-            helperText={errors.nome_completo?.message}
-          />
-          <TextField
-            label="Email"
-            type="email"
-            variant="outlined"
-            color="secondary"
-            {...register('email')}
-            error={!!errors.email}
-            helperText={errors.email?.message}
-          />
+          <Grid container gap={2} maxWidth={"600px"}>
+            <Grid item display={"flex"} gap={1} md={12} xs={12} lg={12}>
+              <TextField
+                label="Nome Completo"
+                type="text"
+                variant="outlined"
+                color="secondary"
+                fullWidth
+                {...register('nome_completo')}
+                error={!!errors.nome_completo}
+                helperText={errors.nome_completo?.message}
+              />
+              <Checkbox
+                checked={sendData.nome_completo}
+                color="secondary"
+                onChange={() => setSendData({ ...sendData, nome_completo: !sendData.nome_completo })}
+                inputProps={{ 'aria-label': 'controlled' }}
+              />
+            </Grid>
+            <Grid item display={"flex"} gap={1} md={12} xs={12} lg={12}>
+              <TextField
+                label="Email"
+                type="email"
+                variant="outlined"
+                color="secondary"
+                fullWidth
+                {...register('email')}
+                error={!!errors.email}
+                helperText={errors.email?.message}
+              />
+              <Checkbox
+                checked={sendData.email}
+                color="secondary"
+                onChange={() => setSendData({ ...sendData, email: !sendData.email })}
+                inputProps={{ 'aria-label': 'controlled' }}
+              />
+            </Grid>
+          </Grid>
           <Grid container item display={"flex"} justifyContent={"right"}>
             <Button color="secondary" type="submit" variant="contained">Atualizar</Button>
           </Grid>
         </CardContent>
-      </Card>
-    </form>
+      </Card >
+    </form >
   )
 }

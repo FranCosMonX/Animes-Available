@@ -9,7 +9,7 @@ interface EditarPerfilParams {
   updatedAt: Date,
   userID: number,
   atualizarDados: () => void
-  enableSystemMessage: (message: string, severity: AlertColor) => void
+  enableSystemMessage: (message: string, severity: AlertColor, tempo_espera_para_processamento?: number, tempo_msnsagem_visivel?: number) => void
 }
 
 export default function EditarPerfil({ updatedAt, userID, atualizarDados, enableSystemMessage }: EditarPerfilParams) {
@@ -30,11 +30,15 @@ export default function EditarPerfil({ updatedAt, userID, atualizarDados, enable
   })
 
   const onSubmit: SubmitHandler<editarPerfilFormData> = async (data) => {
-    if (sendData.usuario && (data.usuario === '' || !data.usuario))
-      setError('usuario', { message: "O campo de usuário não pode estar em branco" })
-
-    if (!sendData.usuario && !sendData.anime_preferido && !sendData.jogo_preferido && !sendData.hobby)
+    if (!!sendData.usuario && (data.usuario == '' || !data.usuario || data.usuario.length < 5)) {
+      setError('usuario', { message: "O campo de usuário não pode estar em branco e tem que ter no mínimo 5 caracteres." })
+      return
+    }
+    if (!sendData.usuario && !sendData.anime_preferido && !sendData.jogo_preferido && !sendData.hobby) {
       enableSystemMessage("É necessário preencher algum campo para atualizar os dados", "error")
+      return
+    }
+
 
     let jogo_preferido, anime_preferido, hobby, usuario;
     if (sendData.anime_preferido) anime_preferido = data.anime_preferido

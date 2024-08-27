@@ -9,9 +9,8 @@ export const editarInfoPessoalSchema = z
         .max(100, { message: 'O campo não pode ultrapassar mais que 100 caracteres.' }),
       z.literal('')
     ]),
-    senha: z.string()
+    senha: z.string().min(1, { message: "Campo obrigatório!" })
   })
   .partial({ nome_completo: true, email: true })
-  .required({ senha: true })
 
 export type editarInfoPessoalFormData = z.infer<typeof editarInfoPessoalSchema>
