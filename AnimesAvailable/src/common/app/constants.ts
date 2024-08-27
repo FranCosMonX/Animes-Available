@@ -1,3 +1,6 @@
+/**
+ * Passagem de tempo para o monitorador de sessão
+ */
 
 /**
  * Para realizar algum processamento

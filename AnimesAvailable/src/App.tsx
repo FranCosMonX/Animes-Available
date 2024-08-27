@@ -1,6 +1,7 @@
 
-import { Route, Routes } from 'react-router-dom'
+import { Outlet, Route, Routes } from 'react-router-dom'
 import './App.css'
+import PrivateRoutes from './components/system/privateRoute'
 import Cadastro from './pages/cadastro/cadastro'
 import Inicio from './pages/inicio/inicio'
 import Login from './pages/login/login'
@@ -11,11 +12,15 @@ function App() {
 
   return (
     <Routes>
-      <Route index element={<Inicio />} />
-      <Route path='/cadastro' element={<Cadastro />}></Route>
-      <Route path='/login' element={<Login />}></Route>
-      <Route path='/animes/todos' element={<CatalogoGeral />}></Route>
-      <Route path='/perfil' element={<Perfil />}></Route>
+      <Route path='/' element={<Outlet />}>
+        <Route index element={<Inicio />} />
+        <Route path='/cadastro' element={<Cadastro />}></Route>
+        <Route path='/login' element={<Login />}></Route>
+        <Route element={<PrivateRoutes />}>
+          <Route path='/animes/todos' element={<CatalogoGeral />} />
+          <Route path='/perfil' element={<Perfil />} />
+        </Route>
+      </Route>
     </Routes>
   )
 }

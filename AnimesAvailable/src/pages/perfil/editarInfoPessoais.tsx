@@ -6,7 +6,7 @@ import { EditarPerfilParams } from "../../@types/usuario.type"
 import { api } from "../../common/api/config"
 import { editarInfoPessoalFormData, editarInfoPessoalSchema } from "./schema/editarInfoPessoal.schema"
 
-export default function EditarInfosPessoais({ updatedAt, userID, atualizarDados, enableSystemMessage }: EditarPerfilParams) {
+const EditarInfosPessoais = ({ updatedAt, userID, atualizarDados, enableSystemMessage }: EditarPerfilParams) => {
   const atualizadoEm = new Date(updatedAt)
   const [sendData, setSendData] = useState<{ email: boolean, nome_completo: boolean }>({
     email: false, nome_completo: false
@@ -126,3 +126,4 @@ export default function EditarInfosPessoais({ updatedAt, userID, atualizarDados,
     </form >
   )
 }
+export default EditarInfosPessoais

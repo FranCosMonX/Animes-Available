@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertColor, Button, Card, CardContent, CardHeader, Checkbox, Grid, TextField, Typography } from "@mui/material";
-import React, { useState } from "react";
+import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { api } from "../../common/api/config";
 import { editarPerfilFormData, editarPerfilSchema } from "./schema/editarPerfil.schema";
@@ -12,7 +12,7 @@ interface EditarPerfilParams {
   enableSystemMessage: (message: string, severity: AlertColor, tempo_espera_para_processamento?: number, tempo_msnsagem_visivel?: number) => void
 }
 
-export default function EditarPerfil({ updatedAt, userID, atualizarDados, enableSystemMessage }: EditarPerfilParams) {
+const EditarPerfil = ({ updatedAt, userID, atualizarDados, enableSystemMessage }: EditarPerfilParams) => {
   const atualizadoEm = new Date(updatedAt)
   const [sendData, setSendData] = useState<{
     usuario: boolean, anime_preferido: boolean, jogo_preferido: boolean, hobby: boolean
@@ -60,103 +60,102 @@ export default function EditarPerfil({ updatedAt, userID, atualizarDados, enable
   }
 
   return (
-    <React.Fragment>
-      <form onSubmit={handleSubmit(onSubmit)} className="form_popup">
-        <Card sx={{ padding: "10px" }}>
-          <CardHeader
-            title="Editar informações de Perfil"
-            subheader={`Atualizado em ${atualizadoEm}`}
-          />
-          <CardContent
-            sx={{
-              padding: "10px",
-              display: "flex",
-              flexDirection: "column",
-              gap: "12px"
-            }}
-          >
-            <Typography variant="body2">Informação(ões) a ser(em) atualizada(s).</Typography>
-            <Grid container gap={2} maxWidth={"600px"}>
-              <Grid item display={"flex"} gap={1} md={12} xs={12} lg={12}>
-                <TextField
-                  label="Usuário"
-                  type="text"
-                  variant="outlined"
-                  color="secondary"
-                  fullWidth
-                  {...register('usuario')}
-                  error={!!errors.usuario}
-                  helperText={errors.usuario?.message}
-                />
-                <Checkbox
-                  checked={sendData.usuario}
-                  color="secondary"
-                  onChange={() => setSendData({ ...sendData, usuario: !sendData.usuario })}
-                  inputProps={{ 'aria-label': 'controlled' }}
-                />
-              </Grid>
-              <Grid item display={"flex"} gap={1} md={12} xs={12} lg={12}>
-                <TextField
-                  label="Jogo Preferido"
-                  type="text"
-                  variant="outlined"
-                  color="secondary"
-                  fullWidth
-                  {...register('jogo_preferido')}
-                  error={!!errors.jogo_preferido}
-                  helperText={errors.jogo_preferido?.message}
-                />
-                <Checkbox
-                  checked={sendData.jogo_preferido}
-                  color="secondary"
-                  onChange={() => setSendData({ ...sendData, jogo_preferido: !sendData.jogo_preferido })}
-                  inputProps={{ 'aria-label': 'controlled' }}
-                />
-              </Grid>
-              <Grid item display={"flex"} gap={1} md={12} xs={12} lg={12}>
-                <TextField
-                  label="Anime Preferido"
-                  type="text"
-                  variant="outlined"
-                  color="secondary"
-                  fullWidth
-                  {...register('anime_preferido')}
-                  error={!!errors.anime_preferido}
-                  helperText={errors.anime_preferido?.message}
-                />
-                <Checkbox
-                  checked={sendData.anime_preferido}
-                  color="secondary"
-                  onChange={() => setSendData({ ...sendData, anime_preferido: !sendData.anime_preferido })}
-                  inputProps={{ 'aria-label': 'controlled' }}
-                />
-              </Grid>
-              <Grid item display={"flex"} gap={1} md={12} xs={12} lg={12}>
-                <TextField
-                  label="Hobby"
-                  type="text"
-                  variant="outlined"
-                  color="secondary"
-                  fullWidth
-                  {...register('hobby')}
-                  error={!!errors.hobby}
-                  helperText={errors.hobby?.message}
-                />
-                <Checkbox
-                  checked={sendData.hobby}
-                  color="secondary"
-                  onChange={() => setSendData({ ...sendData, hobby: !sendData.hobby })}
-                  inputProps={{ 'aria-label': 'controlled' }}
-                />
-              </Grid>
+    <form onSubmit={handleSubmit(onSubmit)} className="form_popup">
+      <Card sx={{ padding: "10px" }}>
+        <CardHeader
+          title="Editar informações de Perfil"
+          subheader={`Atualizado em ${atualizadoEm}`}
+        />
+        <CardContent
+          sx={{
+            padding: "10px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "12px"
+          }}
+        >
+          <Typography variant="body2">Informação(ões) a ser(em) atualizada(s).</Typography>
+          <Grid container gap={2} maxWidth={"600px"}>
+            <Grid item display={"flex"} gap={1} md={12} xs={12} lg={12}>
+              <TextField
+                label="Usuário"
+                type="text"
+                variant="outlined"
+                color="secondary"
+                fullWidth
+                {...register('usuario')}
+                error={!!errors.usuario}
+                helperText={errors.usuario?.message}
+              />
+              <Checkbox
+                checked={sendData.usuario}
+                color="secondary"
+                onChange={() => setSendData({ ...sendData, usuario: !sendData.usuario })}
+                inputProps={{ 'aria-label': 'controlled' }}
+              />
             </Grid>
-
-            <Grid container item display={"flex"} justifyContent={"right"}>
-              <Button color="secondary" type="submit" variant="contained">Atualizar</Button>
+            <Grid item display={"flex"} gap={1} md={12} xs={12} lg={12}>
+              <TextField
+                label="Jogo Preferido"
+                type="text"
+                variant="outlined"
+                color="secondary"
+                fullWidth
+                {...register('jogo_preferido')}
+                error={!!errors.jogo_preferido}
+                helperText={errors.jogo_preferido?.message}
+              />
+              <Checkbox
+                checked={sendData.jogo_preferido}
+                color="secondary"
+                onChange={() => setSendData({ ...sendData, jogo_preferido: !sendData.jogo_preferido })}
+                inputProps={{ 'aria-label': 'controlled' }}
+              />
             </Grid>
-          </CardContent>
-        </Card>
-      </form>
-    </React.Fragment>
+            <Grid item display={"flex"} gap={1} md={12} xs={12} lg={12}>
+              <TextField
+                label="Anime Preferido"
+                type="text"
+                variant="outlined"
+                color="secondary"
+                fullWidth
+                {...register('anime_preferido')}
+                error={!!errors.anime_preferido}
+                helperText={errors.anime_preferido?.message}
+              />
+              <Checkbox
+                checked={sendData.anime_preferido}
+                color="secondary"
+                onChange={() => setSendData({ ...sendData, anime_preferido: !sendData.anime_preferido })}
+                inputProps={{ 'aria-label': 'controlled' }}
+              />
+            </Grid>
+            <Grid item display={"flex"} gap={1} md={12} xs={12} lg={12}>
+              <TextField
+                label="Hobby"
+                type="text"
+                variant="outlined"
+                color="secondary"
+                fullWidth
+                {...register('hobby')}
+                error={!!errors.hobby}
+                helperText={errors.hobby?.message}
+              />
+              <Checkbox
+                checked={sendData.hobby}
+                color="secondary"
+                onChange={() => setSendData({ ...sendData, hobby: !sendData.hobby })}
+                inputProps={{ 'aria-label': 'controlled' }}
+              />
+            </Grid>
+          </Grid>
+          <Grid container item display={"flex"} justifyContent={"right"}>
+            <Button color="secondary" type="submit" variant="contained">Atualizar</Button>
+          </Grid>
+        </CardContent>
+      </Card>
+    </form>
   )
 }
+
+export default EditarPerfil;

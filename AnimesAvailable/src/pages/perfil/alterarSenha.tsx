@@ -5,7 +5,7 @@ import { EditarPerfilParams } from "../../@types/usuario.type"
 import { api } from "../../common/api/config"
 import { alterarSenhaFormData, alterarSenhaSchema } from "./schema/alterarSenha.schema"
 
-export default function AlterarSenha({ updatedAt, userID, atualizarDados, enableSystemMessage }: EditarPerfilParams) {
+const AlterarSenha = ({ updatedAt, userID, atualizarDados, enableSystemMessage }: EditarPerfilParams) => {
   const atualizadoEm = new Date(updatedAt)
 
   const {
@@ -82,3 +82,5 @@ export default function AlterarSenha({ updatedAt, userID, atualizarDados, enable
     </form>
   )
 }
+
+export default AlterarSenha
