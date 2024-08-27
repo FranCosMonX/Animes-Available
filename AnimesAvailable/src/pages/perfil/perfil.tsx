@@ -161,7 +161,12 @@ export default function Perfil() {
       )
     else
       componente = (
-        <AlterarSenha updatedAt={dadosUsuario.updatedAt} />
+        <AlterarSenha
+          updatedAt={dadosUsuario.updatedAt}
+          userID={dadosUsuario.id}
+          atualizarDados={callbackFunctionModal}
+          enableSystemMessage={enableSystemMessage}
+        />
       )
 
     return (

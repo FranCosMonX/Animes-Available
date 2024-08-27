@@ -66,9 +66,11 @@ export class UsersService {
       mensagem: "Senha original inválida."
     })
 
+    const nova_senha = await this.authService.hashPassword(data.nova_senha)
+
     const usuario = await this.prismaService.usuario.update({
       where: { id: userID },
-      data: { senha: await this.authService.hashPassword(data.nova_senha) }
+      data: { senha: nova_senha }
     })
 
     return this.removerDadosSensiveisOuNulos(usuario)

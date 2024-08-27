@@ -1,13 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button, Card, CardContent, CardHeader, Divider, Grid, TextField, Typography } from "@mui/material"
 import { SubmitHandler, useForm } from "react-hook-form"
+import { EditarPerfilParams } from "../../@types/usuario.type"
+import { api } from "../../common/api/config"
 import { alterarSenhaFormData, alterarSenhaSchema } from "./schema/alterarSenha.schema"
 
-interface EditarParams {
-  updatedAt: Date
-}
-
-export default function AlterarSenha({ updatedAt }: EditarParams) {
+export default function AlterarSenha({ updatedAt, userID, atualizarDados, enableSystemMessage }: EditarPerfilParams) {
   const atualizadoEm = new Date(updatedAt)
 
   const {
@@ -19,7 +17,16 @@ export default function AlterarSenha({ updatedAt }: EditarParams) {
   })
 
   const onSubmit: SubmitHandler<alterarSenhaFormData> = async (data) => {
-    console.log(data)
+    const { senha, nova_senha } = data
+    api.patch(`/users/${userID}/perfil/Senha`, { senha, nova_senha })
+      .then(() => {
+        enableSystemMessage("Dados atualizados com sucesso!", 'success')
+        atualizarDados()
+      })
+      .catch((err) => {
+        enableSystemMessage(!!err.response.data.message ? err.response.data.message : "Houve uma falha em atualizar os dados", 'error')
+        atualizarDados()
+      })
   }
 
   return (
