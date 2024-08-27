@@ -4,23 +4,12 @@ import { MensagemDoSistemaParams } from "../../@types/sistema.type";
 import { ResumoUsuario, Usuario as User } from "../../@types/usuario.type";
 import { api } from "../../common/api/config";
 import { useHandleLogout } from "../../common/app/auth";
+import { TEMPO_ESPERA_MENSAGEM, TEMPO_MENSAGEM_VISIVEL } from "../../common/app/constants";
 import { Base } from "../../components/elementoHTMLEstatico";
 import MensagemDoSistema from "../../components/system/mensagem";
 import AlterarSenha from "./alterarSenha";
 import EditarInfosPessoais from "./editarInfoPessoais";
 import EditarPerfil from "./editarPerfil";
-
-/**
- * Em milissegundo
- */
-const TEMPO_ESPERA_MENSAGEM = 5000
-const TEMPO_MENSAGEM_VISIVEL = 4000
-
-export const perfil = {
-  button: {
-    infoPublica: false
-  }
-}
 
 export default function Perfil() {
   const [emProcessamento, setEmProcessamento] = useState(false) //Mostrar ao usuário que esta havendo algum processamento
@@ -34,63 +23,65 @@ export default function Perfil() {
   })
   const [btnAtualizar, setBtnAtualizar] = useState<{
     infoPublica: boolean, infoPrivada: boolean, senha: boolean
-  }>({ infoPrivada: false, infoPublica: perfil.button.infoPublica, senha: false })
+  }>({ infoPrivada: false, infoPublica: false, senha: false })
 
   useEffect(() => {
     if (logout)
       handleLogout()
   }, [logout, handleLogout])
 
-  useEffect(() => {
-    setBtnAtualizar(prevState => ({
-      ...prevState,
-      infoPublica: perfil.button.infoPublica
-    }));
-  }, [perfil.button.infoPublica]);
 
+  /**
+   * carregar os dados do usuário ao carregar a página de usuário
+   */
   useEffect(() => {
     if (!inicializado) {
       setEmProcessamento(true)
-      const obterDados = async () => {
-        const usuarioResumido = sessionStorage.getItem('usuario')
-        if (!usuarioResumido) {
-
-          activateError("Usuário não encontrado!", "error");
-          setTimeout(() => {
-            setLogout(true)
-          }, TEMPO_ESPERA_MENSAGEM)
-          return
-        }
-        const usuario: ResumoUsuario = JSON.parse(usuarioResumido);
-
-        await api.get(`/users/${usuario.id}`)
-          .then((response) => {
-            const usuario: User = response.data.usuario
-            usuario.logado = true;
-            setDadosUsuario(usuario)
-            sessionStorage.setItem('usuario', JSON.stringify(usuario))
-            console.log(response)
-            setEmProcessamento(false)
-          })
-          .catch(() => {
-            activateError("Usuário não encontrado!", "error");
-
-            setTimeout(() => {
-              setLogout(true)
-            }, TEMPO_ESPERA_MENSAGEM)
-          })
-      }
-      obterDados()
-      setInicializado(true)
+      getDadosUsuario().finally(() => setInicializado(true))
     }
   }, [inicializado])
+
+  /**
+   * Atualizar os dados do usuário
+   * @returns 
+   */
+  const getDadosUsuario = async () => {
+    const usuarioResumido = sessionStorage.getItem('usuario')
+    if (!usuarioResumido) {
+
+      enableSystemMessage("Usuário não encontrado!", "error");
+      setTimeout(() => {
+        setLogout(true)
+      }, TEMPO_ESPERA_MENSAGEM)
+      return
+    }
+
+    const usuario: ResumoUsuario = JSON.parse(usuarioResumido);
+
+    await api.get(`/users/${usuario.id}`)
+      .then((response) => {
+        const usuario: User = response.data.usuario
+        usuario.logado = true;
+        setDadosUsuario(usuario)
+        sessionStorage.setItem('usuario', JSON.stringify(usuario))
+        console.log(response)
+        setEmProcessamento(false)
+      })
+      .catch((err) => {
+        enableSystemMessage("Usuário não encontrado!", "error");
+        console.log(err)
+        setTimeout(() => {
+          setLogout(true)
+        }, TEMPO_ESPERA_MENSAGEM)
+      })
+  }
 
   /**
    * Habilitar campo de erro usando a mensagem do sistema
    * @param message 
    * @param severity 
    */
-  const activateError = (message: string, severity: AlertColor) => {
+  const enableSystemMessage = (message: string, severity: AlertColor) => {
     setMsgSistema({
       ...msgSistema,
       severity: severity,
@@ -103,6 +94,7 @@ export default function Perfil() {
     }, TEMPO_ESPERA_MENSAGEM);
   }
 
+  //Buttons
   const handleEditarPerfil = () => {
     setModalOpen(false)
     setBtnAtualizar({
@@ -136,6 +128,12 @@ export default function Perfil() {
     console.log(btnAtualizar)
   }
 
+  //CALLBACKS  
+  const callbackFunctionModal = () => {
+    getDadosUsuario()
+    setModalOpen(false)
+  }
+
   const handleModal = () => {
     let componente: JSX.Element;
     if (!dadosUsuario) {
@@ -145,7 +143,12 @@ export default function Perfil() {
 
     if (btnAtualizar.infoPublica)
       componente = (
-        <EditarPerfil updatedAt={dadosUsuario.updatedAt} />
+        <EditarPerfil
+          updatedAt={dadosUsuario.updatedAt}
+          userID={dadosUsuario.id}
+          atualizarDados={callbackFunctionModal}
+          enableSystemMessage={enableSystemMessage}
+        />
       )
     else if (btnAtualizar.infoPrivada)
       componente = (
@@ -156,14 +159,10 @@ export default function Perfil() {
         <AlterarSenha updatedAt={dadosUsuario.updatedAt} />
       )
 
-
     return (
       <Modal
         open={modalOpen}
-        onClose={() => {
-          setModalOpen(false)
-          perfil.button.infoPublica = false
-        }}
+        onClose={() => setModalOpen(false)}
         sx={{
           display: "flex",
           justifyContent: "center",

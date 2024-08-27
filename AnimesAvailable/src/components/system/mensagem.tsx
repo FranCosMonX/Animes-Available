@@ -19,7 +19,7 @@ const MensagemDoSistema = ({ message, time_ms, severity }: MensagemDoSistemaPara
   };
 
   return (
-    <Box sx={{ width: 300 }}>
+    <Box sx={{ width: 300, position: 'relative' }}>
       <Snackbar
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
         open={open}

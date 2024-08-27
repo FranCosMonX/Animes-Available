@@ -3,7 +3,7 @@ import { AlertColor } from "@mui/material";
 export interface AlertParams {
   message: string;
   severity: AlertColor;
-  visible: boolean;
+  visible?: boolean;
 }
 
 export interface MensagemDoSistemaParams extends AlertParams {
