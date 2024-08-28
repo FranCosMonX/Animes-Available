@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Button, Card, CardContent, CardHeader, Checkbox, Divider, Grid, TextField, Typography } from "@mui/material"
+import { Button, Card, CardContent, CardHeader, Checkbox, Divider, Grid, Modal, TextField, Typography } from "@mui/material"
 import { useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { EditarPerfilParams } from "../../@types/usuario.type"
@@ -8,6 +8,7 @@ import { editarInfoPessoalFormData, editarInfoPessoalSchema } from "./schema/edi
 
 const EditarInfosPessoais = ({ updatedAt, userID, atualizarDados, enableSystemMessage }: EditarPerfilParams) => {
   const atualizadoEm = new Date(updatedAt)
+  const [modalOpen, setModalOpen] = useState(true)
   const [sendData, setSendData] = useState<{ email: boolean, nome_completo: boolean }>({
     email: false, nome_completo: false
   })
@@ -54,76 +55,87 @@ const EditarInfosPessoais = ({ updatedAt, userID, atualizarDados, enableSystemMe
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="form_popup">
-      <Card sx={{ padding: "10px" }}>
-        <CardHeader
-          title="Editar informações de Perfil"
-          subheader={`Atualizado em ${atualizadoEm}`}
-        />
-        <CardContent
-          sx={{
-            padding: "10px",
-            display: "flex",
-            flexDirection: "column",
-            gap: "12px"
-          }}
-        >
-          <Typography variant="body2">Prove que é você</Typography>
-          <TextField
-            label="Senha"
-            type="password"
-            variant="outlined"
-            color="secondary"
-            {...register('senha')}
-            error={!!errors.senha}
-            helperText={errors.senha?.message}
+    <Modal
+      open={modalOpen}
+      onClose={() => setModalOpen(false)}
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        height: "maxContent",
+        alignItems: "center"
+      }}
+    >
+      <form onSubmit={handleSubmit(onSubmit)} className="form_popup">
+        <Card sx={{ padding: "10px" }}>
+          <CardHeader
+            title="Editar informações de Perfil"
+            subheader={`Atualizado em ${atualizadoEm}`}
           />
-          <Divider />
-          <Typography variant="body2">Informação(ões) a ser(em) atualizada(s).</Typography>
-          <Grid container gap={2} maxWidth={"600px"}>
-            <Grid item display={"flex"} gap={1} md={12} xs={12} lg={12}>
-              <TextField
-                label="Nome Completo"
-                type="text"
-                variant="outlined"
-                color="secondary"
-                fullWidth
-                {...register('nome_completo')}
-                error={!!errors.nome_completo}
-                helperText={errors.nome_completo?.message}
-              />
-              <Checkbox
-                checked={sendData.nome_completo}
-                color="secondary"
-                onChange={() => setSendData({ ...sendData, nome_completo: !sendData.nome_completo })}
-                inputProps={{ 'aria-label': 'controlled' }}
-              />
+          <CardContent
+            sx={{
+              padding: "10px",
+              display: "flex",
+              flexDirection: "column",
+              gap: "12px"
+            }}
+          >
+            <Typography variant="body2">Prove que é você</Typography>
+            <TextField
+              label="Senha"
+              type="password"
+              variant="outlined"
+              color="secondary"
+              {...register('senha')}
+              error={!!errors.senha}
+              helperText={errors.senha?.message}
+            />
+            <Divider />
+            <Typography variant="body2">Informação(ões) a ser(em) atualizada(s).</Typography>
+            <Grid container gap={2} maxWidth={"600px"}>
+              <Grid item display={"flex"} gap={1} md={12} xs={12} lg={12}>
+                <TextField
+                  label="Nome Completo"
+                  type="text"
+                  variant="outlined"
+                  color="secondary"
+                  fullWidth
+                  {...register('nome_completo')}
+                  error={!!errors.nome_completo}
+                  helperText={errors.nome_completo?.message}
+                />
+                <Checkbox
+                  checked={sendData.nome_completo}
+                  color="secondary"
+                  onChange={() => setSendData({ ...sendData, nome_completo: !sendData.nome_completo })}
+                  inputProps={{ 'aria-label': 'controlled' }}
+                />
+              </Grid>
+              <Grid item display={"flex"} gap={1} md={12} xs={12} lg={12}>
+                <TextField
+                  label="Email"
+                  type="email"
+                  variant="outlined"
+                  color="secondary"
+                  fullWidth
+                  {...register('email')}
+                  error={!!errors.email}
+                  helperText={errors.email?.message}
+                />
+                <Checkbox
+                  checked={sendData.email}
+                  color="secondary"
+                  onChange={() => setSendData({ ...sendData, email: !sendData.email })}
+                  inputProps={{ 'aria-label': 'controlled' }}
+                />
+              </Grid>
             </Grid>
-            <Grid item display={"flex"} gap={1} md={12} xs={12} lg={12}>
-              <TextField
-                label="Email"
-                type="email"
-                variant="outlined"
-                color="secondary"
-                fullWidth
-                {...register('email')}
-                error={!!errors.email}
-                helperText={errors.email?.message}
-              />
-              <Checkbox
-                checked={sendData.email}
-                color="secondary"
-                onChange={() => setSendData({ ...sendData, email: !sendData.email })}
-                inputProps={{ 'aria-label': 'controlled' }}
-              />
+            <Grid container item display={"flex"} justifyContent={"right"}>
+              <Button color="secondary" type="submit" variant="contained">Atualizar</Button>
             </Grid>
-          </Grid>
-          <Grid container item display={"flex"} justifyContent={"right"}>
-            <Button color="secondary" type="submit" variant="contained">Atualizar</Button>
-          </Grid>
-        </CardContent>
-      </Card >
-    </form >
+          </CardContent>
+        </Card >
+      </form >
+    </Modal>
   )
 }
 export default EditarInfosPessoais

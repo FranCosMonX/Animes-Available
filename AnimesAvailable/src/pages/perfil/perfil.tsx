@@ -1,4 +1,4 @@
-import { AlertColor, Button, Card, CardContent, Divider, Grid, LinearProgress, Modal, Typography } from "@mui/material";
+import { AlertColor, Button, Card, CardContent, Divider, Grid, LinearProgress, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { MensagemDoSistemaParams } from "../../@types/sistema.type";
 import { ResumoUsuario, Usuario as User } from "../../@types/usuario.type";
@@ -15,7 +15,6 @@ export default function Perfil() {
   const [emProcessamento, setEmProcessamento] = useState(false) //Mostrar ao usuário que esta havendo algum processamento
   const [inicializado, setInicializado] = useState(false) //configurações iniciais obrigatórias
   const [dadosUsuario, setDadosUsuario] = useState<User>()
-  const [modalOpen, setModalOpen] = useState(false)
   const [logout, setLogout] = useState(false)
   const handleLogout = useHandleLogout()
   const [msgSistema, setMsgSistema] = useState<MensagemDoSistemaParams>({
@@ -94,55 +93,72 @@ export default function Perfil() {
     }, tempo_espera_para_processamento ? tempo_espera_para_processamento : TEMPO_ESPERA_MENSAGEM);
   }
 
+  const handleTeste = () => {
+    console.log(dadosUsuario && !(!((<EditarPerfil
+      updatedAt={dadosUsuario.updatedAt}
+      userID={dadosUsuario.id}
+      atualizarDados={callbackFunctionModal}
+      enableSystemMessage={enableSystemMessage}
+    /> && btnAtualizar.infoPublica) && (
+        <EditarInfosPessoais
+          updatedAt={dadosUsuario.updatedAt}
+          userID={dadosUsuario.id}
+          atualizarDados={callbackFunctionModal}
+          enableSystemMessage={enableSystemMessage}
+        /> && btnAtualizar.infoPrivada
+      )
+    ) && (
+        <AlterarSenha
+          updatedAt={dadosUsuario.updatedAt}
+          userID={dadosUsuario.id}
+          atualizarDados={callbackFunctionModal}
+          enableSystemMessage={enableSystemMessage}
+        /> && btnAtualizar.senha
+      )))
+  }
   //Buttons
   const handleEditarPerfil = () => {
-    setModalOpen(false)
     setBtnAtualizar({
       infoPrivada: false,
       infoPublica: true,
       senha: false
     })
-    setModalOpen(true)
-    console.log(btnAtualizar)
+    handleTeste()
   }
 
   const handleEditarInfosPrivadas = () => {
-    setModalOpen(false)
     setBtnAtualizar({
       infoPrivada: true,
       infoPublica: false,
       senha: false
     })
-    setModalOpen(true)
     console.log(btnAtualizar)
+    handleTeste()
   }
 
   const handleAlterarSenha = () => {
-    setModalOpen(false)
     setBtnAtualizar({
       infoPrivada: false,
       infoPublica: false,
       senha: true
     })
-    setModalOpen(true)
+    handleTeste()
     console.log(btnAtualizar)
   }
 
   //CALLBACKS  
   const callbackFunctionModal = () => {
     getDadosUsuario()
-    setModalOpen(false)
   }
 
   const handleModal = () => {
-    let componente: JSX.Element;
-    if (!dadosUsuario) {
-      console.log("Erro, sem dados do usuario")
-      return false
-    }
+    if (
+      !dadosUsuario ||
+      !(btnAtualizar.infoPrivada || btnAtualizar.infoPublica || btnAtualizar.senha)
+    ) return false
 
     if (btnAtualizar.infoPublica)
-      componente = (
+      return (
         <EditarPerfil
           updatedAt={dadosUsuario.updatedAt}
           userID={dadosUsuario.id}
@@ -151,7 +167,7 @@ export default function Perfil() {
         />
       )
     else if (btnAtualizar.infoPrivada)
-      componente = (
+      return (
         <EditarInfosPessoais
           updatedAt={dadosUsuario.updatedAt}
           userID={dadosUsuario.id}
@@ -160,7 +176,7 @@ export default function Perfil() {
         />
       )
     else
-      componente = (
+      return (
         <AlterarSenha
           updatedAt={dadosUsuario.updatedAt}
           userID={dadosUsuario.id}
@@ -168,21 +184,6 @@ export default function Perfil() {
           enableSystemMessage={enableSystemMessage}
         />
       )
-
-    return (
-      <Modal
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          height: "maxContent",
-          alignItems: "center"
-        }}
-      >
-        {componente}
-      </Modal>
-    )
   }
 
   return (
@@ -235,13 +236,8 @@ export default function Perfil() {
             time_ms={msgSistema.time_ms}
           />
         }
+        {handleModal()}
       </Base>
-      {
-        modalOpen &&
-        dadosUsuario &&
-        (btnAtualizar.infoPublica || btnAtualizar.infoPrivada || btnAtualizar.senha) &&
-        handleModal()
-      }
     </React.Fragment>
   )
 }

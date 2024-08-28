@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Button, Card, CardContent, CardHeader, Divider, Grid, TextField, Typography } from "@mui/material"
+import { Button, Card, CardContent, CardHeader, Divider, Grid, Modal, TextField, Typography } from "@mui/material"
+import { useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { EditarPerfilParams } from "../../@types/usuario.type"
 import { api } from "../../common/api/config"
@@ -7,6 +8,7 @@ import { alterarSenhaFormData, alterarSenhaSchema } from "./schema/alterarSenha.
 
 const AlterarSenha = ({ updatedAt, userID, atualizarDados, enableSystemMessage }: EditarPerfilParams) => {
   const atualizadoEm = new Date(updatedAt)
+  const [modalOpen, setModalOpen] = useState(true)
 
   const {
     register,
@@ -30,56 +32,67 @@ const AlterarSenha = ({ updatedAt, userID, atualizarDados, enableSystemMessage }
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="form_popup">
-      <Card sx={{ padding: "10px" }}>
-        <CardHeader
-          title="Editar informações de Perfil"
-          subheader={`Atualizado em ${atualizadoEm}`}
-        />
-        <CardContent
-          sx={{
-            padding: "10px",
-            display: "flex",
-            flexDirection: "column",
-            gap: "12px"
-          }}
-        >
-          <Typography variant="body2">Prove que é você</Typography>
-          <TextField
-            label="Senha"
-            type="password"
-            variant="outlined"
-            color="secondary"
-            {...register('senha')}
-            error={!!errors.senha}
-            helperText={errors.senha?.message}
+    <Modal
+      open={modalOpen}
+      onClose={() => setModalOpen(false)}
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        height: "maxContent",
+        alignItems: "center"
+      }}
+    >
+      <form onSubmit={handleSubmit(onSubmit)} className="form_popup">
+        <Card sx={{ padding: "10px" }}>
+          <CardHeader
+            title="Editar informações de Perfil"
+            subheader={`Atualizado em ${atualizadoEm}`}
           />
-          <Divider />
-          Informação a ser atualizada.
-          <TextField
-            label="Nova Senha"
-            type="password"
-            variant="outlined"
-            color="secondary"
-            {...register('nova_senha')}
-            error={!!errors.nova_senha}
-            helperText={errors.nova_senha?.message}
-          />
-          <TextField
-            label="Repetir senha"
-            type="password"
-            variant="outlined"
-            color="secondary"
-            {...register('repetir_senha')}
-            error={!!errors.repetir_senha}
-            helperText={errors.repetir_senha?.message}
-          />
-          <Grid container item display={"flex"} justifyContent={"right"}>
-            <Button color="secondary" type="submit" variant="contained">Atualizar</Button>
-          </Grid>
-        </CardContent>
-      </Card>
-    </form>
+          <CardContent
+            sx={{
+              padding: "10px",
+              display: "flex",
+              flexDirection: "column",
+              gap: "12px"
+            }}
+          >
+            <Typography variant="body2">Prove que é você</Typography>
+            <TextField
+              label="Senha"
+              type="password"
+              variant="outlined"
+              color="secondary"
+              {...register('senha')}
+              error={!!errors.senha}
+              helperText={errors.senha?.message}
+            />
+            <Divider />
+            Informação a ser atualizada.
+            <TextField
+              label="Nova Senha"
+              type="password"
+              variant="outlined"
+              color="secondary"
+              {...register('nova_senha')}
+              error={!!errors.nova_senha}
+              helperText={errors.nova_senha?.message}
+            />
+            <TextField
+              label="Repetir senha"
+              type="password"
+              variant="outlined"
+              color="secondary"
+              {...register('repetir_senha')}
+              error={!!errors.repetir_senha}
+              helperText={errors.repetir_senha?.message}
+            />
+            <Grid container item display={"flex"} justifyContent={"right"}>
+              <Button color="secondary" type="submit" variant="contained">Atualizar</Button>
+            </Grid>
+          </CardContent>
+        </Card>
+      </form>
+    </Modal>
   )
 }
 
