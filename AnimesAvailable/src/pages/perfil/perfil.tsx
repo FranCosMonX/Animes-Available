@@ -1,5 +1,5 @@
 import { AlertColor, Button, Card, CardContent, Divider, Grid, LinearProgress, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { MensagemDoSistemaParams } from "../../@types/sistema.type";
 import { ResumoUsuario, Usuario as User } from "../../@types/usuario.type";
 import { api } from "../../common/api/config";
@@ -172,57 +172,55 @@ export default function Perfil() {
   }
 
   return (
-    <React.Fragment>
-      <Base>
-        <Card sx={{ background: 'none', width: '90%', margin: '25px' }}>
-          <CardContent>
-            <Typography color={'primary'} textAlign={'center'} variant="h4">INFORMAÇÕES DE USUÁRIO</Typography>
-            <Grid container display={'flex'} flexDirection={'column'} gap={1} marginTop={2}>
-              <Grid item>
-                <Typography color={'primary'}>Usuário: {dadosUsuario?.usuario}</Typography>
-              </Grid>
-              <Grid item>
-                <Typography color={'primary'}>Jogo preferido: {dadosUsuario?.jogo_preferido ? dadosUsuario?.jogo_preferido : ""}</Typography>
-              </Grid>
-              <Grid item>
-                <Typography color={'primary'}>Anime preferido: {dadosUsuario?.anime_preferido ? dadosUsuario?.anime_preferido : ""}</Typography>
-              </Grid>
-              <Grid item>
-                <Typography color={'primary'}>Hobby: {dadosUsuario?.hobby ? dadosUsuario?.hobby : ""}</Typography>
-              </Grid>
-              <Divider sx={{ backgroundColor: 'white' }} />
-              <Grid item>
-                <Typography color={'primary'}>Nome Completo: {dadosUsuario?.nome_completo}</Typography>
-              </Grid>
-              <Grid item>
-                <Typography color={'primary'}>Email: {dadosUsuario?.email}</Typography>
-              </Grid>
-              <Grid item>
-                <Typography color={'primary'}>Senha: *********</Typography>
-              </Grid>
-              {emProcessamento && <LinearProgress color='secondary' />}
-              {
-                <Grid item display={'flex'} gap={2} justifyContent={'center'}>
-                  <Button color="secondary" variant="contained" type="button" disabled={emProcessamento} onClick={handleEditarPerfil}>Editar Perfil</Button>
-                  <Button color="secondary" variant="contained" type="button" disabled={emProcessamento} onClick={handleEditarInfosPrivadas}>Editar Informações Pessoais</Button>
-                  <Button color="secondary" variant="contained" type="button" disabled={emProcessamento} onClick={handleAlterarSenha}>Alterar Senha</Button>
-                  <Button variant="contained" type="button" disabled={emProcessamento}>Encerrar Conta</Button>
-                </Grid>
-              }
+    <Base verificaLogin={true}>
+      <Card sx={{ background: 'none', width: '90%', margin: '25px' }}>
+        <CardContent>
+          <Typography color={'primary'} textAlign={'center'} variant="h4">INFORMAÇÕES DE USUÁRIO</Typography>
+          <Grid container display={'flex'} flexDirection={'column'} gap={1} marginTop={2}>
+            <Grid item>
+              <Typography color={'primary'}>Usuário: {dadosUsuario?.usuario}</Typography>
             </Grid>
-          </CardContent>
-        </Card>
-        {
-          msgSistema.visible &&
-          <MensagemDoSistema
-            visible={false}
-            message={msgSistema.message}
-            severity={msgSistema.severity}
-            time_ms={msgSistema.time_ms}
-          />
-        }
-        {handleModal()}
-      </Base>
-    </React.Fragment>
+            <Grid item>
+              <Typography color={'primary'}>Jogo preferido: {dadosUsuario?.jogo_preferido ? dadosUsuario?.jogo_preferido : ""}</Typography>
+            </Grid>
+            <Grid item>
+              <Typography color={'primary'}>Anime preferido: {dadosUsuario?.anime_preferido ? dadosUsuario?.anime_preferido : ""}</Typography>
+            </Grid>
+            <Grid item>
+              <Typography color={'primary'}>Hobby: {dadosUsuario?.hobby ? dadosUsuario?.hobby : ""}</Typography>
+            </Grid>
+            <Divider sx={{ backgroundColor: 'white' }} />
+            <Grid item>
+              <Typography color={'primary'}>Nome Completo: {dadosUsuario?.nome_completo}</Typography>
+            </Grid>
+            <Grid item>
+              <Typography color={'primary'}>Email: {dadosUsuario?.email}</Typography>
+            </Grid>
+            <Grid item>
+              <Typography color={'primary'}>Senha: *********</Typography>
+            </Grid>
+            {emProcessamento && <LinearProgress color='secondary' />}
+            {
+              <Grid item display={'flex'} gap={2} justifyContent={'center'}>
+                <Button color="secondary" variant="contained" type="button" disabled={emProcessamento} onClick={handleEditarPerfil}>Editar Perfil</Button>
+                <Button color="secondary" variant="contained" type="button" disabled={emProcessamento} onClick={handleEditarInfosPrivadas}>Editar Informações Pessoais</Button>
+                <Button color="secondary" variant="contained" type="button" disabled={emProcessamento} onClick={handleAlterarSenha}>Alterar Senha</Button>
+                <Button variant="contained" type="button" disabled={emProcessamento}>Encerrar Conta</Button>
+              </Grid>
+            }
+          </Grid>
+        </CardContent>
+      </Card>
+      {
+        msgSistema.visible &&
+        <MensagemDoSistema
+          visible={false}
+          message={msgSistema.message}
+          severity={msgSistema.severity}
+          time_ms={msgSistema.time_ms}
+        />
+      }
+      {handleModal()}
+    </Base>
   )
 }

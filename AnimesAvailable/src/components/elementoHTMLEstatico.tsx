@@ -3,9 +3,11 @@ import { ReactNode, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ResumoUsuario } from "../@types/usuario.type";
 import MenuUsuario from "./MenuUsuario";
+import CircularLoading from "./system/CircularProgress";
 
 interface propBase {
   children: ReactNode;
+  verificaLogin?: boolean;
 }
 
 interface HeaderParams {
@@ -61,8 +63,9 @@ export const Footer = () => {
   )
 }
 
-export const Base = ({ children }: propBase) => {
+export const Base = ({ children, verificaLogin = false }: propBase) => {
   const [inicializado, setInicializado] = useState(false)
+  const [emProcessamento, setEmProcessamento] = useState(verificaLogin)
   const [usuarioLogado, setUsuarioLogado] = useState<{ logado: boolean, usuario: string }>({
     logado: false, usuario: ""
   })
@@ -91,13 +94,19 @@ export const Base = ({ children }: propBase) => {
         })
       }
       setInicializado(true)
+      if (emProcessamento) {
+        setTimeout(() => {
+          setEmProcessamento(false)
+        }, 1000)
+      }
     }
   }, [inicializado])
 
   return (
     <div className="base" >
-      <Header nomeUsuario={usuarioLogado.usuario} usuarioLogado={usuarioLogado.logado} />
-      {children}
+      {emProcessamento && <CircularLoading />}
+      {!emProcessamento && <Header nomeUsuario={usuarioLogado.usuario} usuarioLogado={usuarioLogado.logado} />}
+      {!emProcessamento && children}
     </ div>
   )
 }

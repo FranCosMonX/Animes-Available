@@ -65,7 +65,7 @@ const listaAnimes: Array<AnimeInterface> = [{
 
 const CatalogoGeral = () => {
   return (
-    <Base>
+    <Base verificaLogin={true}>
       <Catalogo listaAnimes={listaAnimes} />
     </Base>
   )
