@@ -6,7 +6,7 @@ import { EditarPerfilParams } from "../../@types/usuario.type"
 import { api } from "../../common/api/config"
 import { alterarSenhaFormData, alterarSenhaSchema } from "./schema/alterarSenha.schema"
 
-const AlterarSenha = ({ updatedAt, userID, atualizarDados, enableSystemMessage }: EditarPerfilParams) => {
+const AlterarSenha = ({ updatedAt, userID, atualizarDados, fecharModal, enableSystemMessage }: EditarPerfilParams) => {
   const atualizadoEm = new Date(updatedAt)
   const [modalOpen, setModalOpen] = useState(true)
 
@@ -24,17 +24,22 @@ const AlterarSenha = ({ updatedAt, userID, atualizarDados, enableSystemMessage }
       .then(() => {
         enableSystemMessage("Dados atualizados com sucesso!", 'success')
         atualizarDados()
+        fecharModal()
       })
       .catch((err) => {
         enableSystemMessage(!!err.response.data.message ? err.response.data.message : "Houve uma falha em atualizar os dados", 'error')
         atualizarDados()
+        fecharModal()
       })
   }
 
   return (
     <Modal
       open={modalOpen}
-      onClose={() => setModalOpen(false)}
+      onClose={() => {
+        fecharModal()
+        setModalOpen(false)
+      }}
       sx={{
         display: "flex",
         justifyContent: "center",

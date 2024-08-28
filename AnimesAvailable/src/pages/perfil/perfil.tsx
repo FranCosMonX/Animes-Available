@@ -93,29 +93,6 @@ export default function Perfil() {
     }, tempo_espera_para_processamento ? tempo_espera_para_processamento : TEMPO_ESPERA_MENSAGEM);
   }
 
-  const handleTeste = () => {
-    console.log(dadosUsuario && !(!((<EditarPerfil
-      updatedAt={dadosUsuario.updatedAt}
-      userID={dadosUsuario.id}
-      atualizarDados={callbackFunctionModal}
-      enableSystemMessage={enableSystemMessage}
-    /> && btnAtualizar.infoPublica) && (
-        <EditarInfosPessoais
-          updatedAt={dadosUsuario.updatedAt}
-          userID={dadosUsuario.id}
-          atualizarDados={callbackFunctionModal}
-          enableSystemMessage={enableSystemMessage}
-        /> && btnAtualizar.infoPrivada
-      )
-    ) && (
-        <AlterarSenha
-          updatedAt={dadosUsuario.updatedAt}
-          userID={dadosUsuario.id}
-          atualizarDados={callbackFunctionModal}
-          enableSystemMessage={enableSystemMessage}
-        /> && btnAtualizar.senha
-      )))
-  }
   //Buttons
   const handleEditarPerfil = () => {
     setBtnAtualizar({
@@ -123,7 +100,6 @@ export default function Perfil() {
       infoPublica: true,
       senha: false
     })
-    handleTeste()
   }
 
   const handleEditarInfosPrivadas = () => {
@@ -133,7 +109,6 @@ export default function Perfil() {
       senha: false
     })
     console.log(btnAtualizar)
-    handleTeste()
   }
 
   const handleAlterarSenha = () => {
@@ -142,13 +117,20 @@ export default function Perfil() {
       infoPublica: false,
       senha: true
     })
-    handleTeste()
     console.log(btnAtualizar)
   }
 
   //CALLBACKS  
-  const callbackFunctionModal = () => {
+  const callbackModalOK = () => {
     getDadosUsuario()
+  }
+
+  const callbackCloseModal = () => {
+    setBtnAtualizar({
+      infoPrivada: false,
+      infoPublica: false,
+      senha: false
+    })
   }
 
   const handleModal = () => {
@@ -162,7 +144,8 @@ export default function Perfil() {
         <EditarPerfil
           updatedAt={dadosUsuario.updatedAt}
           userID={dadosUsuario.id}
-          atualizarDados={callbackFunctionModal}
+          atualizarDados={callbackModalOK}
+          fecharModal={callbackCloseModal}
           enableSystemMessage={enableSystemMessage}
         />
       )
@@ -171,7 +154,8 @@ export default function Perfil() {
         <EditarInfosPessoais
           updatedAt={dadosUsuario.updatedAt}
           userID={dadosUsuario.id}
-          atualizarDados={callbackFunctionModal}
+          atualizarDados={callbackModalOK}
+          fecharModal={callbackCloseModal}
           enableSystemMessage={enableSystemMessage}
         />
       )
@@ -180,7 +164,8 @@ export default function Perfil() {
         <AlterarSenha
           updatedAt={dadosUsuario.updatedAt}
           userID={dadosUsuario.id}
-          atualizarDados={callbackFunctionModal}
+          atualizarDados={callbackModalOK}
+          fecharModal={callbackCloseModal}
           enableSystemMessage={enableSystemMessage}
         />
       )

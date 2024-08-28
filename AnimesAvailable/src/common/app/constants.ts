@@ -1,6 +1,7 @@
 /**
  * Passagem de tempo para o monitorador de sessão
  */
+export const TEMPO_CHECAR_USUARIO_LOGADO = 10 * 100;
 
 /**
  * Para realizar algum processamento

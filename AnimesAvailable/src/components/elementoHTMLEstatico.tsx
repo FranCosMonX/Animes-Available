@@ -8,39 +8,13 @@ interface propBase {
   children: ReactNode;
 }
 
-export const Header = () => {
-  const [inicializado, setInicializado] = useState(false)
-  const [usuarioLogado, setUsuarioLogado] = useState<{ logado: boolean, usuario: string }>({
-    logado: false, usuario: ""
-  })
+interface HeaderParams {
+  usuarioLogado: boolean;
+  nomeUsuario: string;
+}
+
+export const Header = ({ usuarioLogado, nomeUsuario }: HeaderParams) => {
   const navigate = useNavigate()
-
-  useEffect(() => {
-    if (!usuarioLogado.logado && !inicializado) {
-      const resultado = sessionStorage.getItem('usuario')
-      if (resultado) {
-        const usuario: ResumoUsuario = JSON.parse(resultado)
-
-        console.log(usuario.logado)
-        if (usuario.logado)
-          setUsuarioLogado({
-            logado: true,
-            usuario: usuario.usuario
-          })
-        else
-          setUsuarioLogado({
-            usuario: "",
-            logado: false
-          })
-      } else {
-        setUsuarioLogado({
-          usuario: "",
-          logado: false
-        })
-      }
-      setInicializado(true)
-    }
-  }, [inicializado])
 
   return (
     <Grid container
@@ -51,7 +25,7 @@ export const Header = () => {
     >
       <Grid item>
         <Button type="button" onClick={() => {
-          if (usuarioLogado.logado)
+          if (usuarioLogado)
             navigate('/animes/todos')
           else {
             navigate('/')
@@ -60,9 +34,9 @@ export const Header = () => {
           <Typography fontWeight={"bold"}>Animes Available</Typography>
         </Button>
       </Grid>
-      {usuarioLogado.logado && <MenuUsuario usuario={usuarioLogado.usuario} />}
+      {usuarioLogado && <MenuUsuario usuario={nomeUsuario} />}
       {
-        !usuarioLogado.logado &&
+        !usuarioLogado &&
         <Grid item display={"flex"} gap={2}>
           <Button color="secondary" variant="contained" onClick={() => navigate('/cadastro')}>CADASTRAR</Button>
           <Button color="secondary" variant="contained" onClick={() => navigate('/login')}> LOGIN</Button>
@@ -88,9 +62,41 @@ export const Footer = () => {
 }
 
 export const Base = ({ children }: propBase) => {
+  const [inicializado, setInicializado] = useState(false)
+  const [usuarioLogado, setUsuarioLogado] = useState<{ logado: boolean, usuario: string }>({
+    logado: false, usuario: ""
+  })
+
+  useEffect(() => {
+    if (!usuarioLogado.logado && !inicializado) {
+      const resultado = sessionStorage.getItem('usuario')
+      if (resultado) {
+        const usuario: ResumoUsuario = JSON.parse(resultado)
+
+        console.log(usuario)
+        if (usuario.logado)
+          setUsuarioLogado({
+            logado: true,
+            usuario: usuario.usuario
+          })
+        else
+          setUsuarioLogado({
+            usuario: "",
+            logado: false
+          })
+      } else {
+        setUsuarioLogado({
+          usuario: "",
+          logado: false
+        })
+      }
+      setInicializado(true)
+    }
+  }, [inicializado])
+
   return (
     <div className="base" >
-      <Header />
+      <Header nomeUsuario={usuarioLogado.usuario} usuarioLogado={usuarioLogado.logado} />
       {children}
     </ div>
   )

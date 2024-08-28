@@ -1,18 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AlertColor, Button, Card, CardContent, CardHeader, Checkbox, Grid, Modal, TextField, Typography } from "@mui/material";
+import { Button, Card, CardContent, CardHeader, Checkbox, Grid, Modal, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { EditarPerfilParams } from "../../@types/usuario.type";
 import { api } from "../../common/api/config";
 import { editarPerfilFormData, editarPerfilSchema } from "./schema/editarPerfil.schema";
 
-interface EditarPerfilParams {
-  updatedAt: Date,
-  userID: number,
-  atualizarDados: () => void
-  enableSystemMessage: (message: string, severity: AlertColor, tempo_espera_para_processamento?: number, tempo_msnsagem_visivel?: number) => void
-}
-
-const EditarPerfil = ({ updatedAt, userID, atualizarDados, enableSystemMessage }: EditarPerfilParams) => {
+const EditarPerfil = ({ updatedAt, userID, atualizarDados, fecharModal, enableSystemMessage }: EditarPerfilParams) => {
   const atualizadoEm = new Date(updatedAt)
   const [modalOpen, setModalOpen] = useState(true)
   const [sendData, setSendData] = useState<{
@@ -52,10 +46,12 @@ const EditarPerfil = ({ updatedAt, userID, atualizarDados, enableSystemMessage }
         console.log(res)
         enableSystemMessage("Dados atualizados com sucesso!", 'success')
         atualizarDados()
+        fecharModal()
       })
       .catch((err) => {
         enableSystemMessage(!!err.response.data.message ? err.response.data.message : "Houve uma falha em atualizar os dados", 'error')
         atualizarDados()
+        fecharModal()
       })
 
   }
@@ -63,7 +59,10 @@ const EditarPerfil = ({ updatedAt, userID, atualizarDados, enableSystemMessage }
   return (
     <Modal
       open={modalOpen}
-      onClose={() => setModalOpen(false)}
+      onClose={() => {
+        fecharModal()
+        setModalOpen(false)
+      }}
       sx={{
         display: "flex",
         justifyContent: "center",

@@ -6,7 +6,7 @@ import { EditarPerfilParams } from "../../@types/usuario.type"
 import { api } from "../../common/api/config"
 import { editarInfoPessoalFormData, editarInfoPessoalSchema } from "./schema/editarInfoPessoal.schema"
 
-const EditarInfosPessoais = ({ updatedAt, userID, atualizarDados, enableSystemMessage }: EditarPerfilParams) => {
+const EditarInfosPessoais = ({ updatedAt, userID, atualizarDados, fecharModal, enableSystemMessage }: EditarPerfilParams) => {
   const atualizadoEm = new Date(updatedAt)
   const [modalOpen, setModalOpen] = useState(true)
   const [sendData, setSendData] = useState<{ email: boolean, nome_completo: boolean }>({
@@ -45,19 +45,23 @@ const EditarInfosPessoais = ({ updatedAt, userID, atualizarDados, enableSystemMe
         console.log(res)
         enableSystemMessage("Dados atualizados com sucesso!", 'success')
         atualizarDados()
+        fecharModal()
       })
       .catch((err) => {
         console.log(err)
         enableSystemMessage(!!err.response.data.message ? err.response.data.message : "Houve uma falha em atualizar os dados", 'error')
         atualizarDados()
+        fecharModal()
       })
-    console.log(data)
   }
 
   return (
     <Modal
       open={modalOpen}
-      onClose={() => setModalOpen(false)}
+      onClose={() => {
+        fecharModal()
+        setModalOpen(false)
+      }}
       sx={{
         display: "flex",
         justifyContent: "center",

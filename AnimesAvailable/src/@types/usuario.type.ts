@@ -20,8 +20,9 @@ export interface ResumoUsuario {
 }
 
 export interface EditarPerfilParams {
-  updatedAt: Date,
-  userID: number,
-  atualizarDados: () => void
-  enableSystemMessage: (message: string, severity: AlertColor, tempo_espera_para_processamento?: number, tempo_msnsagem_visivel?: number) => void
+  updatedAt: Date;
+  userID: number;
+  atualizarDados: () => void;
+  fecharModal: () => void;
+  enableSystemMessage: (message: string, severity: AlertColor, tempo_espera_para_processamento?: number, tempo_msnsagem_visivel?: number) => void;
 }
