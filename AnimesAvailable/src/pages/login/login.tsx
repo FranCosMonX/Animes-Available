@@ -1,46 +1,69 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Button, Card, Grid, TextField, Typography } from "@mui/material"
+import { Alert, Button, Card, Grid, TextField, Typography } from "@mui/material"
+import { useEffect, useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
-import imagemAnimes from '../../../assets/images/Selecta-Visión-Amazon-Prime-Video.jpg'
-import { api } from "../../../common/api/config"
-import { Base } from "../elementoHTMLEstatico"
+import { AlertParams } from "../../@types/sistema.type"
+import { Usuario } from "../../@types/usuario.type"
+import imagemAnimes from '../../assets/images/Selecta-Visión-Amazon-Prime-Video.jpg'
+import { api } from "../../common/api/config"
+import { Base } from "../../components/elementoHTMLEstatico"
 import { loginFormData, loginSchema } from "./loginSchema"
 
 const Login = () => {
   const navigate = useNavigate()
+  const [msgSistema, setMsgSistema] = useState<AlertParams>({
+    message: "", visible: false, severity: "info"
+  })
+
+  useEffect(() => {
+    if (msgSistema.visible) {
+      setTimeout(() => {
+        setMsgSistema({
+          ...msgSistema,
+          visible: false
+        })
+      }, 4000);
+    }
+  }, [msgSistema])
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
-    setError
+    formState: { errors }
   } = useForm<loginFormData>({
     resolver: zodResolver(loginSchema),
   })
 
   const onSubmit: SubmitHandler<loginFormData> = async (data) => {
     await api.post("/auth/login", data)
-      .then(response => {
-        api.defaults.headers.common.Authorization = `Bearer ${response.data.usuario.token}`
-        navigate('/animes/todos')
+      .then(async response => {
+        const resposta: { id: number, token: string } = response.data.usuario
+        api.defaults.headers.common.Authorization = `Bearer ${resposta.token}`
+
+        await api.get(`/users/${resposta.id}`)
+          .then((res) => {
+            const usuario: Usuario = res.data.usuario
+            usuario.logado = true
+            sessionStorage.setItem('usuario', JSON.stringify(usuario))
+            navigate('/animes/todos')
+          })
+          .catch((error) => {
+            setMsgSistema({
+              visible: true,
+              message: error.response.data.message,
+              severity: "error"
+            })
+            api.defaults.headers.common.Authorization = ""
+          })
       })
       .catch(error => {
-        setError("usuario", { message: error.response.data.mensagem })
-        setError("senha", { message: error.response.data.mensagem })
+        setMsgSistema({
+          visible: true,
+          message: error.response.data.message,
+          severity: "error"
+        })
       })
-    console.log(data)
-    const usuario = {
-      logado: true,
-      usuario: "teste",
-      jogoPreferido: "The Legends of Neverland",
-      animePreferido: "Code Geass, Toaru Series, etc",
-      hobby: "jogar e assistir animes",
-      nomeCompleto: "Conta de Teste",
-      email: "teste@gmail.com",
-      senha: "teste"
-    }
-    sessionStorage.setItem("usuario", JSON.stringify(usuario))
   }
 
   return (
@@ -79,6 +102,10 @@ const Login = () => {
             error={!!errors.senha}
             helperText={errors.senha?.message}
           />
+          {
+            msgSistema.visible &&
+            <Alert severity={msgSistema.severity} variant="outlined">{msgSistema.message}</Alert>
+          }
           <Grid container item display={"flex"} justifyContent={"space-between"}>
             <Button
               color="secondary"

@@ -1,20 +1,27 @@
-import { Route, Routes } from 'react-router-dom'
+
+import { Outlet, Route, Routes, useNavigate } from 'react-router-dom'
 import './App.css'
-import CatalogoGeral from './components/pages/animes/todos/todosOsAnimes'
-import Cadastro from './components/pages/cadastro/cadastro'
-import Inicio from './components/pages/inicio/inicio'
-import Login from './components/pages/login/login'
-import Perfil from './components/pages/usuario/perfil/perfil'
+import PrivateRoutes from './components/system/privateRoute'
+import Cadastro from './pages/cadastro/cadastro'
+import Inicio from './pages/inicio/inicio'
+import Login from './pages/login/login'
+import Perfil from './pages/perfil/perfil'
+import CatalogoGeral from './pages/todos/todosOsAnimes'
 
 function App() {
+  const navigate = useNavigate()
 
   return (
     <Routes>
-      <Route index element={<Inicio />} />
-      <Route path='/cadastro' element={<Cadastro />}></Route>
-      <Route path='/login' element={<Login />}></Route>
-      <Route path='/animes/todos' element={<CatalogoGeral />}></Route>
-      <Route path='/perfil' element={<Perfil />}></Route>
+      <Route path='/' element={<Outlet />}>
+        <Route index element={<Inicio />} />
+        <Route path='/cadastro' element={<Cadastro />}></Route>
+        <Route path='/login' element={<Login />}></Route>
+        <Route element={<PrivateRoutes />}>
+          <Route path='/animes/todos' element={<CatalogoGeral />} />
+          <Route path='/perfil' element={<Perfil />} />
+        </Route>
+      </Route>
     </Routes>
   )
 }

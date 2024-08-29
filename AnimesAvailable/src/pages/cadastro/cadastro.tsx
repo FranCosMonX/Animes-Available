@@ -1,14 +1,22 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button, Card, Grid, TextField, Typography } from "@mui/material"
+import { useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
-import imagemAnimes from '../../../assets/images/Selecta-Visión-Amazon-Prime-Video.jpg'
-import { api } from "../../../common/api/config"
-import { Base } from "../elementoHTMLEstatico"
+import { MensagemDoSistemaParams } from "../../@types/sistema.type"
+import imagemAnimes from '../../assets/images/Selecta-Visión-Amazon-Prime-Video.jpg'
+import { api } from "../../common/api/config"
+import { TEMPO_MENSAGEM_VISIVEL } from "../../common/app/constants"
+import { Base } from "../../components/elementoHTMLEstatico"
+import MensagemDoSistema from "../../components/system/mensagem"
 import { cadastroFormData, cadastroSchema } from "./cadastroSchema"
 
 const Cadastro = () => {
   const navigate = useNavigate()
+  const [btnDisable, setBtnDisable] = useState(false)
+  const [msgSistema, setMsgSistema] = useState<MensagemDoSistemaParams>({
+    message: '', severity: "error", time_ms: TEMPO_MENSAGEM_VISIVEL, visible: false
+  })
 
   const {
     register,
@@ -21,12 +29,26 @@ const Cadastro = () => {
 
   const onsubmit: SubmitHandler<cadastroFormData> = async (data) => {
     await api.post("/auth/cadastrar", data)
-      .then(response => {
-        console.log(response)
-        navigate('/login')
+      .then(() => {
+        setBtnDisable(true)
+        setMsgSistema({
+          message: "Cadastro efetuado com sucesso!",
+          severity: "success",
+          time_ms: 3000,
+          visible: true
+        })
+
+        setTimeout(() => {
+          setMsgSistema({
+            ...msgSistema,
+            visible: false
+          })
+          navigate('/')
+        }, 3100)
       })
       .catch(error => {
-        setError(error.response.data.entidade, { message: error.response.data.mensagem })
+        console.log(error)
+        setError(error.response.data.entity, { message: error.response.data.message })
       })
 
   }
@@ -102,11 +124,18 @@ const Cadastro = () => {
               variant="text"
               type="button"
               onClick={() => navigate('/login')}
+              disabled={btnDisable}
             >Ja possuo conta</Button>
-            <Button color="secondary" variant="contained" type="submit" >Concluir</Button>
+            <Button color="secondary" variant="contained" type="submit" disabled={btnDisable} >Concluir</Button>
           </Grid>
         </Card>
       </form>
+      {msgSistema.visible && <MensagemDoSistema
+        visible={false}
+        message={msgSistema.message}
+        severity={msgSistema.severity}
+        time_ms={msgSistema.time_ms}
+      />}
     </Base>
   )
 }

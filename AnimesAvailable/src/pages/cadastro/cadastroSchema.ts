@@ -16,7 +16,7 @@ export const cadastroSchema = z
   .required()
   .refine(data => data.senha === data.repetirSenha, {
     message: 'As senhas devem ser iguais nos campos senha e repetir senha.',
-    path: ['repeatPassword'],
+    path: ['repetirSenha'],
   })
 
 export type cadastroFormData = z.infer<typeof cadastroSchema>

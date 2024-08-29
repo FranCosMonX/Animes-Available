@@ -1,6 +1,6 @@
 import { Grid, Typography } from '@mui/material'
-import imagemAnimes from '../../../assets/images/Selecta-Visión-Amazon-Prime-Video.jpg'
-import { Base, Footer } from '../elementoHTMLEstatico'
+import imagemAnimes from '../../assets/images/Selecta-Visión-Amazon-Prime-Video.jpg'
+import { Base, Footer } from '../../components/elementoHTMLEstatico'
 
 const Inicio = () => {
   return (

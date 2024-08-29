@@ -1,5 +1,5 @@
-import Catalogo from "../../../Catalogo";
-import { Base } from "../../elementoHTMLEstatico";
+import Catalogo from "../../components/Catalogo";
+import { Base } from "../../components/elementoHTMLEstatico";
 import './todosOsAnimes.css';
 
 interface AnimeInterface {
@@ -65,7 +65,7 @@ const listaAnimes: Array<AnimeInterface> = [{
 
 const CatalogoGeral = () => {
   return (
-    <Base>
+    <Base verificaLogin={true}>
       <Catalogo listaAnimes={listaAnimes} />
     </Base>
   )

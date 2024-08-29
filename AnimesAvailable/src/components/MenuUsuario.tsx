@@ -3,7 +3,11 @@ import { Avatar, Box, Divider, Grid, IconButton, ListItemIcon, Menu, MenuItem, T
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-export default function MenuUsuario() {
+interface MenuUsuarioParams {
+  usuario: string;
+}
+
+export default function MenuUsuario({ usuario }: MenuUsuarioParams) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const navigate = useNavigate()
   const open = Boolean(anchorEl);
@@ -46,7 +50,7 @@ export default function MenuUsuario() {
         <MenuItem onClick={() => navigate('/perfil')}>
           <Grid container display={'flex'} gap={1} alignItems={'center'}>
             <Grid item><Avatar /></Grid>
-            <Grid item><Typography>Teste</Typography></Grid>
+            <Grid item><Typography>{usuario ? usuario : ""}</Typography></Grid>
           </Grid>
         </MenuItem>
         <Divider />

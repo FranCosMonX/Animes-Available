@@ -6,10 +6,19 @@ actor API
 
 usecase "Cadastro de usuário" as cadastro
 usecase "Login de usuário" as login
+usecase "gerenciamento do perfil" as gerPerfil
+usecase "editar informações" as editInfoPerfil
+usecase "excluir perfil" as excluirPerfil
+usecase "visualizar perfil" as exibirInfoPerfil
 
 usuario -- cadastro
 usuario -- login
+usuario -- gerPerfil
 cadastro .-> login
+login .-> gerPerfil
+gerPerfil -- editInfoPerfil
+gerPerfil -- excluirPerfil
+gerPerfil -- exibirInfoPerfil
 API -left- BD : salva e resgata dados
 API -- cadastro
 API -- login

@@ -1,0 +1,57 @@
+@startuml
+
+top to bottom direction
+skinparam linetype ortho
+
+skinparam rectangle {
+    BorderColor black
+    BorderThickness 3
+}
+
+agent Internet
+
+node Backend{
+    label "NestJS"
+
+    rectangle Controller{
+        control Endpoints 
+        
+        component Usuario as back_controller_usuario_componnet {
+            usecase "editar Informações" as back_controller_usuario_editInfoPerfil
+            usecase "visualizaar perfil" as back_controller_usuario_verPerfil
+            usecase "apagar todos os dados" as back_controller_usuario_excluirPerfil
+        }
+        
+        component Auth as back_controller_auth_componnet{
+            usecase "cadastro do usuário" as back_auth_cadastro_usuario
+            usecase "logout do usuário" as back_auth_logout_usuario
+        }
+        
+        back_controller_usuario_componnet -- Endpoints
+        back_controller_auth_componnet --- Endpoints
+    }
+    rectangle Service {
+        component Usuario as back_service_usuario_component{
+            usecase "editar Informações Privadas" as back_service_editInfoPrivada
+            usecase "editar Informações Pública" as back_service_editInfoPublica
+            usecase "editar Senha" as back_service_editSenha
+            usecase "visualizaar perfil" as back_service_verPerfil
+            usecase "apagar todos os dados" as back_service_excluirPerfil
+        }
+        
+        component Auth as back_Service_auth_component{
+            usecase "cadastro do usuário" as back_service_cadastro_usuario
+            usecase "logout do usuário" as back_service_logout_usuario
+        }
+    }
+    
+    component Prisma
+    database PostgreSQL
+    
+    Prisma =up== Service : envia solicitações
+    PostgreSQL == Prisma : armazena e coleta dados
+    Endpoints === Internet
+    Controller ==== Service
+}
+
+@enduml
