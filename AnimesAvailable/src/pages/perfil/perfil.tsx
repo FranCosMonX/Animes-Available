@@ -10,6 +10,7 @@ import MensagemDoSistema from "../../components/system/mensagem";
 import AlterarSenha from "./alterarSenha";
 import EditarInfosPessoais from "./editarInfoPessoais";
 import EditarPerfil from "./editarPerfil";
+import ExcluirConta from "./excluirConta";
 
 export default function Perfil() {
   const [emProcessamento, setEmProcessamento] = useState(false) //Mostrar ao usuário que esta havendo algum processamento
@@ -21,8 +22,8 @@ export default function Perfil() {
     message: '', severity: "error", time_ms: TEMPO_MENSAGEM_VISIVEL, visible: false
   })
   const [btnAtualizar, setBtnAtualizar] = useState<{
-    infoPublica: boolean, infoPrivada: boolean, senha: boolean
-  }>({ infoPrivada: false, infoPublica: false, senha: false })
+    infoPublica: boolean, infoPrivada: boolean, senha: boolean, excluirConta: boolean
+  }>({ infoPrivada: false, infoPublica: false, senha: false, excluirConta: false })
 
   useEffect(() => {
     if (logout)
@@ -98,7 +99,8 @@ export default function Perfil() {
     setBtnAtualizar({
       infoPrivada: false,
       infoPublica: true,
-      senha: false
+      senha: false,
+      excluirConta: false
     })
   }
 
@@ -106,7 +108,8 @@ export default function Perfil() {
     setBtnAtualizar({
       infoPrivada: true,
       infoPublica: false,
-      senha: false
+      senha: false,
+      excluirConta: false
     })
     console.log(btnAtualizar)
   }
@@ -115,9 +118,18 @@ export default function Perfil() {
     setBtnAtualizar({
       infoPrivada: false,
       infoPublica: false,
-      senha: true
+      senha: true,
+      excluirConta: false
     })
-    console.log(btnAtualizar)
+  }
+
+  const handleExcluirConta = () => {
+    setBtnAtualizar({
+      infoPrivada: false,
+      infoPublica: false,
+      senha: false,
+      excluirConta: true
+    })
   }
 
   //CALLBACKS  
@@ -129,14 +141,15 @@ export default function Perfil() {
     setBtnAtualizar({
       infoPrivada: false,
       infoPublica: false,
-      senha: false
+      senha: false,
+      excluirConta: false
     })
   }
 
   const handleModal = () => {
     if (
       !dadosUsuario ||
-      !(btnAtualizar.infoPrivada || btnAtualizar.infoPublica || btnAtualizar.senha)
+      !(btnAtualizar.infoPrivada || btnAtualizar.infoPublica || btnAtualizar.senha || btnAtualizar.excluirConta)
     ) return false
 
     if (btnAtualizar.infoPublica)
@@ -159,10 +172,20 @@ export default function Perfil() {
           enableSystemMessage={enableSystemMessage}
         />
       )
-    else
+    else if (btnAtualizar.senha)
       return (
         <AlterarSenha
           updatedAt={dadosUsuario.updatedAt}
+          userID={dadosUsuario.id}
+          atualizarDados={callbackModalOK}
+          fecharModal={callbackCloseModal}
+          enableSystemMessage={enableSystemMessage}
+        />
+      )
+    else
+      return (
+        <ExcluirConta
+          createdAt={dadosUsuario.createdAt}
           userID={dadosUsuario.id}
           atualizarDados={callbackModalOK}
           fecharModal={callbackCloseModal}
@@ -205,7 +228,7 @@ export default function Perfil() {
                 <Button color="secondary" variant="contained" type="button" disabled={emProcessamento} onClick={handleEditarPerfil}>Editar Perfil</Button>
                 <Button color="secondary" variant="contained" type="button" disabled={emProcessamento} onClick={handleEditarInfosPrivadas}>Editar Informações Pessoais</Button>
                 <Button color="secondary" variant="contained" type="button" disabled={emProcessamento} onClick={handleAlterarSenha}>Alterar Senha</Button>
-                <Button variant="contained" type="button" disabled={emProcessamento}>Encerrar Conta</Button>
+                <Button variant="contained" type="button" disabled={emProcessamento} onClick={handleExcluirConta}>Encerrar Conta</Button>
               </Grid>
             }
           </Grid>

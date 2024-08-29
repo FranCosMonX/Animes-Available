@@ -6,7 +6,7 @@ import { EditarPerfilParams } from "../../@types/usuario.type";
 import { api } from "../../common/api/config";
 import { editarPerfilFormData, editarPerfilSchema } from "./schema/editarPerfil.schema";
 
-const EditarPerfil = ({ updatedAt, userID, atualizarDados, fecharModal, enableSystemMessage }: EditarPerfilParams) => {
+const EditarPerfil = ({ updatedAt, userID, atualizarDados, fecharModal, enableSystemMessage }: EditarPerfilParams & { updatedAt: Date }) => {
   const atualizadoEm = new Date(updatedAt)
   const [modalOpen, setModalOpen] = useState(true)
   const [sendData, setSendData] = useState<{

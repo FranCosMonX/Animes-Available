@@ -20,7 +20,6 @@ export interface ResumoUsuario {
 }
 
 export interface EditarPerfilParams {
-  updatedAt: Date;
   userID: number;
   atualizarDados: () => void;
   fecharModal: () => void;

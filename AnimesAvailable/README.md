@@ -8,6 +8,7 @@ As features implementadas foram:
 
 1. Cadastro de usuário: para acessara aplicação, o usuário deve ter uma conta cadastrada. Os dados deverão ser salvos em um Banco de dados.
 2. Login de usuário: para efetuar esta ação, o usuário deverá ter uma conta cadastrada com sucesso.
+3. Gerenciamento de informações do usuário: visualizar, editar e excluir informações e/ou conta do perfil do usuário.
 
 > Em todos os campos de entrada das features implementadas, somente a validação simples do campo está sendo feita, uma vez que o frontend não está conectado nem a uma API e nem a um Banco de dados.
 
