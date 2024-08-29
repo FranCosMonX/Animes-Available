@@ -1,3 +1,5 @@
+<div align="justify">
+
 # Animes Avaliable
 
 O frontend foi desenvolvido por meio de um projeto react com Typescript usando o **vite** para melhor gerenciar os módulos. Umaapresentação mais resumida pode ser encontrada na raiz deste repositório remoto.
@@ -12,11 +14,16 @@ As features implementadas foram:
 
 > Em todos os campos de entrada das features implementadas, somente a validação simples do campo está sendo feita, uma vez que o frontend não está conectado nem a uma API e nem a um Banco de dados.
 
-O comportamento delas pode ser visto pelo seguinte diagrama de caso de uso:
+O comportamento delas pode ser visto pelo diagrama a seguir. Note que nele possui um caso de uso chamado "Gerenciamento do Perfil" que se refere ao gerenciamento de perfil do usuário, ou seja, por meio dele pode-se editar informações e excluir todo o perfil, além de visualisar ele (perfil do usuário). Para que o usuário possa acessar, é importante que ele esteja logado e para logar é importante que tenha uma conta.
 
-<div style="display: flex; justify-content: center;">
+<div align="center">
   <img src="../src/UML/img/diagramaDeCasoDeUso.png" alt="Diagrama de casos de uso contendo as features implementadas até o momento" />
+  <p>Diagrama de Caso de Uso</p>
 </div>
+
+## Autenticação
+
+É necessário que o usuário faça o login na aplicação, recebendo um token de acesso para poder acessar as funcionalidades do sistema. Para isto, ele deverá informar o usuário e senha correto para que seja gerado um token JWT que será usado em todas as futuras requisições, passando o token de acesso pelo cabeçalho da requisição (Bearer token).
 
 ## Ferramentas utilizadas
 
@@ -41,3 +48,4 @@ pnpm i
 //executar a aplicação
 pnpm run dev
 ```
+</div>

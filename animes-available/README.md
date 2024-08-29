@@ -6,15 +6,21 @@ A documentação da API se encontra no [Postman](https://elements.getpostman.com
 
 1. **Cadastrar**: Cadastrar um usuário na aplicação
 2. **Login**: Efetuar o login na aplicação, obtendo um token de acesso.
+3. **Gerenciamento do Perfil**: Fazer edições nas informações, alémde visualizar e excluir o perfil do usuário.
 
 <div align="center">
-  <img src="../src/UML/img/diagramaDeCasoDeUso.png" alt="Diagrama de casos de uso contendo as features implementadas até o momento" />
+  <img src="../src/UML/img/diagramaDeComponentesBackend.png" alt="Diagrama de casos de uso contendo as features implementadas até o momento" />
 </div>
-<p align="center">Diagrama de Caso de Uso.</p>
+<p align="center">Diagrama de componentes.</p>
+
+O diagrama ilustra bem como está organizado os principais componentes da aplicação. O controller é o componente responsável por tratar (em alto nível usando DTO e class validation) as requisições vinda da internet. Ele, também, é responsável por se comunicar diretamente com o Service. O componente Service é responsável por fazer as validações mais baixo nível e se comunica diretamente com o Prisma - agente responsável por se comunicar com o Banco de Dados, para enviar solicitações de armazenamento e/ou coleta de dados no Banco de Dados em questão (PostgreSQL).
+
+As funcionalidade são disponibilizas para a internet por meio de endpoints.
+> Vale Ressaltar que esta aplicação não trata todas as vulnerabilidades listadas no OWASP TOP 10.
 
 ## Entidades
 
-Atualmente, na versão 0.3.0, a aplicação só possuí uma entidade. O usuário, uma das duas entidades principais, possuí os dados cadastrais e dados de perfil de usuário, diminuindo a complexidade das buscas de informações no Banco de Dados. É importante comentar que não será trabalhado com foto de usuário neste primeiro momento.
+Atualmente, na versão 0.4.0, a aplicação só possuí uma entidade. O usuário, uma das duas entidades principais, possuí os dados cadastrais e dados de perfil de usuário, diminuindo a complexidade das buscas de informações no Banco de Dados.
 
 <div align="center">
   <img src="../src/UML/img/classeUsuario.png" alt="Diagrama de casos de uso contendo as features implementadas até o momento" />
