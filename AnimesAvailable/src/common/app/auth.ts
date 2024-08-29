@@ -1,6 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { api } from "../api/config";
 
+export function userIsLogged() {
+  const usuario = sessionStorage.getItem('usuario')
+  return !!usuario
+}
+
 export function useHandleLogout() {
   const navigate = useNavigate();
 

@@ -1,9 +1,14 @@
 import { Button, Grid, Typography } from "@mui/material";
 import { ReactNode, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ResumoUsuario } from "../@types/usuario.type";
+import { MensagemDoSistemaParams } from "../@types/sistema.type";
+import { ResumoUsuario, Usuario } from "../@types/usuario.type";
+import { api } from "../common/api/config";
+import { useHandleLogout } from "../common/app/auth";
+import { TEMPO_MENSAGEM_VISIVEL } from "../common/app/constants";
 import MenuUsuario from "./MenuUsuario";
 import CircularLoading from "./system/CircularProgress";
+import MensagemDoSistema from "./system/mensagem";
 
 interface propBase {
   children: ReactNode;
@@ -64,47 +69,85 @@ export const Footer = () => {
 }
 
 export const Base = ({ children, verificaLogin = false }: propBase) => {
+  const handleLogout = useHandleLogout()
   const [inicializado, setInicializado] = useState(false)
   const [emProcessamento, setEmProcessamento] = useState(verificaLogin)
   const [usuarioLogado, setUsuarioLogado] = useState<{ logado: boolean, usuario: string }>({
     logado: false, usuario: ""
   })
+  const [systemM, setSystemM] = useState<MensagemDoSistemaParams>({
+    message: '', severity: "error", time_ms: TEMPO_MENSAGEM_VISIVEL, visible: false
+  })
 
   useEffect(() => {
-    if (!usuarioLogado.logado && !inicializado) {
-      const resultado = sessionStorage.getItem('usuario')
-      if (resultado) {
-        const usuario: ResumoUsuario = JSON.parse(resultado)
-
-        console.log(usuario)
-        if (usuario.logado)
-          setUsuarioLogado({
-            logado: true,
-            usuario: usuario.usuario
+    if (verificaLogin) {
+      console.log(usuarioLogado)
+      setTimeout(() => {
+        console.log('entrou 1')
+        if (!usuarioLogado.logado) {
+          setEmProcessamento(true)
+          console.log('entrou 2')
+          setSystemM({
+            ...systemM,
+            message: "Usuário deslogado",
+            severity: "info",
+            time_ms: 3000,
+            visible: true
           })
-        else
+
+          setTimeout(() => {
+            handleLogout()
+          }, 3100)
+        } else {
+          setEmProcessamento(false)
+        }
+      }, 200)
+    }
+  }, [usuarioLogado, emProcessamento])
+
+  useEffect(() => {
+    if (verificaLogin) {
+      if (!inicializado) {
+        const resultado = sessionStorage.getItem('usuario')
+        if (resultado) {
+          const usuario: ResumoUsuario = JSON.parse(resultado)
+
+          handleCheckUsuario(usuario.id)
+        } else {
           setUsuarioLogado({
             usuario: "",
             logado: false
           })
-      } else {
-        setUsuarioLogado({
-          usuario: "",
-          logado: false
-        })
-      }
-      setInicializado(true)
-      if (emProcessamento) {
-        setTimeout(() => {
-          setEmProcessamento(false)
-        }, 1000)
+        }
       }
     }
+    setInicializado(true)
   }, [inicializado])
+
+  const handleCheckUsuario = async (userID: number) => {
+    await api.get(`/users/${userID}`)
+      .then((res) => {
+        const usuario: Usuario = res.data.usuario
+        usuarioLogado.logado = true
+        usuarioLogado.usuario = usuario.usuario
+      })
+      .catch(() => {
+        usuarioLogado.logado = false
+      })
+  }
 
   return (
     <div className="base" >
       {emProcessamento && <CircularLoading />}
+      {
+        systemM.visible &&
+        <MensagemDoSistema
+          visible={false}
+          message={systemM.message}
+          severity={systemM.severity}
+          time_ms={systemM.time_ms}
+        />
+      }
       {!emProcessamento && <Header nomeUsuario={usuarioLogado.usuario} usuarioLogado={usuarioLogado.logado} />}
       {!emProcessamento && children}
     </ div>

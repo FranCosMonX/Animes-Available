@@ -1,5 +1,5 @@
 
-import { Outlet, Route, Routes } from 'react-router-dom'
+import { Outlet, Route, Routes, useNavigate } from 'react-router-dom'
 import './App.css'
 import PrivateRoutes from './components/system/privateRoute'
 import Cadastro from './pages/cadastro/cadastro'
@@ -9,6 +9,7 @@ import Perfil from './pages/perfil/perfil'
 import CatalogoGeral from './pages/todos/todosOsAnimes'
 
 function App() {
+  const navigate = useNavigate()
 
   return (
     <Routes>

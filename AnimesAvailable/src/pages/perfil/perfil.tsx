@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { MensagemDoSistemaParams } from "../../@types/sistema.type";
 import { ResumoUsuario, Usuario as User } from "../../@types/usuario.type";
 import { api } from "../../common/api/config";
-import { useHandleLogout } from "../../common/app/auth";
 import { TEMPO_ESPERA_MENSAGEM, TEMPO_MENSAGEM_VISIVEL } from "../../common/app/constants";
 import { Base } from "../../components/elementoHTMLEstatico";
 import MensagemDoSistema from "../../components/system/mensagem";
@@ -16,20 +15,12 @@ export default function Perfil() {
   const [emProcessamento, setEmProcessamento] = useState(false) //Mostrar ao usuário que esta havendo algum processamento
   const [inicializado, setInicializado] = useState(false) //configurações iniciais obrigatórias
   const [dadosUsuario, setDadosUsuario] = useState<User>()
-  const [logout, setLogout] = useState(false)
-  const handleLogout = useHandleLogout()
   const [msgSistema, setMsgSistema] = useState<MensagemDoSistemaParams>({
     message: '', severity: "error", time_ms: TEMPO_MENSAGEM_VISIVEL, visible: false
   })
   const [btnAtualizar, setBtnAtualizar] = useState<{
     infoPublica: boolean, infoPrivada: boolean, senha: boolean, excluirConta: boolean
   }>({ infoPrivada: false, infoPublica: false, senha: false, excluirConta: false })
-
-  useEffect(() => {
-    if (logout)
-      handleLogout()
-  }, [logout, handleLogout])
-
 
   /**
    * carregar os dados do usuário ao carregar a página de usuário
