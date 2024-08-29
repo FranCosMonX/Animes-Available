@@ -64,17 +64,6 @@ const Login = () => {
           severity: "error"
         })
       })
-    // const usuario = {
-    //   logado: true,
-    //   usuario: "teste",
-    //   jogoPreferido: "The Legends of Neverland",
-    //   animePreferido: "Code Geass, Toaru Series, etc",
-    //   hobby: "jogar e assistir animes",
-    //   nomeCompleto: "Conta de Teste",
-    //   email: "teste@gmail.com",
-    //   senha: "teste"
-    // }
-    // sessionStorage.setItem("usuario", JSON.stringify(usuario))
   }
 
   return (

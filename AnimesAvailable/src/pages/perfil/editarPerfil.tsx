@@ -42,8 +42,7 @@ const EditarPerfil = ({ updatedAt, userID, atualizarDados, fecharModal, enableSy
     if (sendData.usuario) usuario = data.usuario
 
     api.patch(`/users/${userID}/perfil/informacaoPublica`, { anime_preferido, jogo_preferido, hobby, usuario })
-      .then((res) => {
-        console.log(res)
+      .then(() => {
         enableSystemMessage("Dados atualizados com sucesso!", 'success')
         atualizarDados()
         fecharModal()

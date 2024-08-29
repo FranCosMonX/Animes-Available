@@ -7,11 +7,7 @@ import { api } from "../../common/api/config"
 import { useHandleLogout } from "../../common/app/auth"
 import { excluirContaFormData, excluirContaSchema } from "./schema/excluirConta"
 
-interface ExcluirContaParams {
-  createdAt: Date;
-}
-
-const ExcluirConta = ({ userID, atualizarDados, fecharModal, enableSystemMessage, createdAt }: EditarPerfilParams & ExcluirContaParams) => {
+const ExcluirConta = ({ userID, atualizarDados, fecharModal, enableSystemMessage, createdAt }: EditarPerfilParams & { createdAt: Date }) => {
   const atualizadoEm = new Date(createdAt)
   const handleLogout = useHandleLogout()
   const [modalOpen, setModalOpen] = useState(true)
@@ -20,8 +16,7 @@ const ExcluirConta = ({ userID, atualizarDados, fecharModal, enableSystemMessage
   const {
     register,
     handleSubmit,
-    formState: { errors },
-    setError
+    formState: { errors }
   } = useForm<excluirContaFormData>({
     resolver: zodResolver(excluirContaSchema)
   })
@@ -46,7 +41,6 @@ const ExcluirConta = ({ userID, atualizarDados, fecharModal, enableSystemMessage
   const cardContent = () => {
     let component;
     if (!btnExcluir) {
-      // if (false) {
       component = (
         <Grid container item display={'flex'} flexDirection={'column'} width={'100%'} gap={2} alignItems={'center'}>
           <Typography variant="body1">Realmente desejas excluir a conta?</Typography>

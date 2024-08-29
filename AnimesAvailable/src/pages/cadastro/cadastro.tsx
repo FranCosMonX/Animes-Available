@@ -21,8 +21,7 @@ const Cadastro = () => {
 
   const onsubmit: SubmitHandler<cadastroFormData> = async (data) => {
     await api.post("/auth/cadastrar", data)
-      .then(response => {
-        console.log(response)
+      .then(() => {
         navigate('/login')
       })
       .catch(error => {

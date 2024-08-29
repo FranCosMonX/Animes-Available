@@ -41,14 +41,12 @@ const EditarInfosPessoais = ({ updatedAt, userID, atualizarDados, fecharModal, e
     if (sendData.nome_completo) nome_completo = data.nome_completo
 
     api.patch(`/users/${userID}/perfil/informacaoPessoal`, { email, nome_completo, senha })
-      .then((res) => {
-        console.log(res)
+      .then(() => {
         enableSystemMessage("Dados atualizados com sucesso!", 'success')
         atualizarDados()
         fecharModal()
       })
       .catch((err) => {
-        console.log(err)
         enableSystemMessage(!!err.response.data.message ? err.response.data.message : "Houve uma falha em atualizar os dados", 'error')
         atualizarDados()
         fecharModal()
